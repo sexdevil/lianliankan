@@ -234,7 +234,9 @@ var game = {
 	refreshOnePic : function(i,j){
 		var a = this.pic[i][j];
 		var img = document.createElement("img");
-		if (a < 10) {
+		if (a == 10) {
+			img.src = "images/blank.gif";
+		} else if (a < 10) {
 			img.src = "images/img00" + a + ".bmp";
 			//console.log(a);
 		} else {
