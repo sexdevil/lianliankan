@@ -1,0 +1,913 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>javascript版连连看</title>
+<link rel="stylesheet" type="text/css" href="css/Common.css" />
+<link rel="stylesheet" type="text/css" href="css/Link.css" />
+<link rel="stylesheet" type="text/css" href="css/DOTA_ALL.css" />
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/packaging.js"></script>
+</head>
+<body>
+<div id="link">
+    <div id="titleWrap">
+    	<div id="title">JavaScript版连连看 v0.2</div>
+        <div id="gameMenu">
+            <div class="DOTA_Menu" id="mainMenu">
+                <div class="DOTA_MainMenu">
+                    <!--<div class="DOTA_MenuItem">游戏(G)</div>
+                    <div class="DOTA_MenuItem">选项(O)</div>
+                    <div class="DOTA_MenuItem">帮助(H)</div>-->
+                </div>
+                <div class="DOTA_SubMenu" style="left: 0px; top: 23px; display: none;">
+                    <div class="DOTA_MenuItem">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">开始</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                    <div class="DOTA_MenuItem">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">暂停</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                    <div class="DOTA_MenuItem">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">结束</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                    <div class="DOTA_MenuSeparator">&nbsp;</div>
+                    <div class="DOTA_MenuItem">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">退出</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                </div>
+                <div class="DOTA_SubMenu" style="left: 60px; top: 23px; display: none;">
+                    <div class="DOTA_MenuItem">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">游戏设置</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                    <div class="DOTA_MenuItem">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">选择地图</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                    <div class="DOTA_MenuItem">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">自定义地图</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                </div>
+                <div class="DOTA_SubMenu" style="left: 120px; top: 23px; display: none;">
+                    <div class="DOTA_MenuItem  ">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">关于</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                    <div class="DOTA_MenuItem ">
+                        <span class="DOTA_MenuItem_Check">&nbsp;</span>
+                        <span class="DOTA_MenuItem_Text">建议和支持</span>
+                        <span class="DOTA_MenuItem_More">&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="closeButton">
+            <div class="btnClose"></div>
+        </div>
+    </div>
+    <div id="leftSlider">
+    	<ul id="mapList">
+        </ul>
+        <div id="gameAreaWrap">
+            <div id="gameArea">
+                <table cellspacing="0" cellpadding="0" border="0" id="gameTable">
+                    <tbody>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="select" id="select"></div>
+                <div class="lineContainer">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+			<div id="gameStatus">
+            	<div id="countDown">倒计时：</div>
+                <div id="timeLine"><div id="timeLineImg"></div></div>
+                <div id="leftBox">剩余方块：<span></span></div>
+            </div>
+            <div id="gameMsg"><div id="score"></div></div>
+        </div>
+    </div>
+    <div id="rightSlider">
+    	<div id="userWrap">
+        	<div id="userHead"><img title="更换头像" id="uhImg" src="images/uh1.gif"></div>
+            <div id="userInfo">
+            	<div id="nickName">昵称:<span>Player</span></div>
+                <div id="userScore">积分:<span>0</span></div>
+                <div id="userLevel">级别:<span>小星星</span></div>
+            </div>
+        </div>
+        <div id="property"><div id="compass"></div><div id="reset"></div></div>
+        <div id="mapInfo">
+        	<div id="mapImage"></div>
+            <div id="mapDetail">
+                <div>地图名称：<span></span></div>
+            	<div>地图难度：<span></span></div>
+            	<div>方块数量：<span></span></div>
+                <div>地图作者：<span></span></div>
+            </div>
+        </div>
+        <div id="scoreInfo">
+        	<div id="timeInfo">已用时间：<span>&nbsp;</span></div>
+            <div id="comboInfo">最高连击：<span>&nbsp;</span></div>
+        </div>
+        <div id="controlButton">
+        	<div id="btnLine1"><div class="btnSet" id="btnSet"></div><div class="btnStart" id="btnStart"></div></div>
+            <div id="btnLine2"><div class="btnSelMap" id="btnSelMap"></div><div class="btnExit" id="btnExit"></div></div>
+        </div>
+    </div>
+</div>
+<div class="setWindow" id="setWindow">
+    <span id="setClose">关闭</span>
+    <p>
+        <label>游戏时间：</label>
+        <select id="gameTime">
+            <option value="120000">120秒</option>
+            <option value="70000">70秒</option>
+            <option value="200000">200秒</option>
+        </select>
+    </p>
+    <p><span>两次击中间隔</span>
+        <select id="continuousHitsTime">
+            <option value="7000">7秒</option>
+            <option value="5000">5秒</option>
+            <option value="10000">10秒</option>
+        </select>
+    <span>秒，才算连击</span></p>
+    <p style="border-bottom:none; text-align:center;"><button id="setSubmit" style="margin-top:16px;">确定</button></p>
+</div>
+<div class="selectMap" id="selectMapWindow">
+    <span id="selectMapClose">关闭</span>
+    <div id="tab">
+        <ul>
+            <li style="border:none;">简单</li>
+            <li>一般</li>
+            <li>困难</li>
+        </ul>
+    </div>
+  <div id="con">
+        <ul>
+            <li>
+                <span><img src="images/maps/Map1.gif" alt="Map1" /></span>
+                <span><img src="images/maps/Map2.gif" alt="Map2" /></span>
+                <span><img src="images/maps/Map3.gif" alt="Map3" /></span>
+                <span><img src="images/maps/Map4.gif" alt="Map4" /></span>
+                <span><img src="images/maps/Map5.gif" alt="Map5" /></span>
+                <span><img src="images/maps/Map6.gif" alt="Map6" /></span>
+                <span><img src="images/maps/Map7.gif" alt="Map7" /></span>
+                <span><img src="images/maps/Map8.gif" alt="Map8" /></span>
+                <span><img src="images/maps/Map9.gif" alt="Map9" /></span>
+                <span><img src="images/maps/Map10.gif" alt="Map10" /></span>
+          </li>
+            <li>b</li>
+            <li>c</li>
+        </ul>
+    </div>
+    <p><button id="selectMapSubmits">确定</button></p>
+</div>
+<div id="mybg">
+</div>
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/map.js"></script>
+<script type="text/javascript" src="js/sound.js"></script>
+<script type="text/javascript" src="js/tab.js"></script>
+<script type="text/javascript">
+var game = {
+	debug:false,
+	ignoreTuan:false,
+	WIDTH : 19, 
+	HEIGHT : 11, 
+	mapNum : 10,
+	NUM_OF_PICTYPE : 50, 
+	tableid:"gameTable", 
+	gameArea : "gameArea",
+	iconWidth:31,
+	iconHeight:35,
+	totalLeft : 0, 
+	totalTime : 120000, //总时间是70s
+	progressBarWidth : 328,
+	usedTime : 0,
+	initProgressBarWidth : 0,
+	timer : null,
+	lastHitTime : 0,
+	currentHitTime : 0,
+	mostContinuousHit : 0,
+	continuousHitTime : 7000,
+	progresserCurrentWidth : 0,
+	currentHits : 0,
+	realignNum : 0,
+	autoDeleteNum : 0,
+	templateMap : null,
+	selectedMapNum : 0,
+	selectedPic : {x:-1, y:-1},
+	soundelec : new FUI.soundComponent({src:'sound/elec.mp3',altSrc:'sound/elec.mp3'}),
+	soundsel : new FUI.soundComponent({src:'sound/sel.mp3',altSrc:'sound/sel.mp3'}),
+	soundstart : new FUI.soundComponent({src:'sound/start.mp3',altSrc:'sound/start.mp3'}),
+	soundend : new FUI.soundComponent({src:'sound/end.mp3',altSrc:'sound/end.mp3'}),
+	refreshOnePic : function(i,j){
+		var a = this.pic[i][j];
+		var img = document.createElement("img");
+		if (a < 10) {
+			img.src = "images/img00" + a + ".bmp";
+			//console.log(a);
+		} else {
+			img.src = "images/img0" + a + ".bmp";
+		}
+		if (!this.nodemaps) { 
+			this.nodemaps = getChildNodes(this.tableid,"td");
+		}
+		this.nodemaps[i*this.WIDTH +j].innerHTML = "";
+		if (a > 0) {
+			this.nodemaps[i*this.WIDTH +j].appendChild(img);
+		}
+	},
+	showAllPics : function(){
+		for (var i = 0; i < this.HEIGHT; i++ ) {
+			for (var j = 0; j < this.WIDTH; j++ ) {
+				this.refreshOnePic(i, j);
+			}
+		}
+	},
+	deleteOnePic : function(i, j) {
+		this.pic[i][j] = 0;
+		this.totalLeft--;
+		this.refreshOnePic(i, j);
+	},
+	isSuccess : function(){
+		if(this.usedTime <= this.totalTime/1000 && this.totalLeft <= 0){
+			return true;
+		}
+	},
+	isFail : function(){
+		if(this.usedTime >= this.totalTime/1000 && this.totalLeft > 0){
+			return true;
+		}
+	},
+	setSelected : function(i,j){
+		this.selectedPic.x = i;
+		this.selectedPic.y = j;
+	},
+	clearSelected : function(i1,j1,i2,j2){
+		this.selectedPic.x = -1;
+		this.selectedPic.y = -1;
+	},
+	SearchPoint : function(T,Trace,connerNum,a1,a2,s){
+		if(connerNum<2){
+			if(this.pic[a1][a2] == 0){
+				if(!T[a1+"|"+a2]){
+					T[ a1+"|"+a2]= connerNum;
+					if(Trace[a1+"|"+a2] == null){
+						Trace[a1+"|"+a2] = s;
+					}
+				}
+			}else{
+				return 1;
+			}
+		}else{
+			if(this.pic[a1][a2] != 0){
+				if(!T[a1+"|"+a2]){
+					T[a1+"|"+a2] = connerNum;
+					if(Trace[a1+"|"+a2] == null){
+						Trace[a1+"|"+a2] = s;
+					}
+				}
+				return 1;
+			}
+		}
+		return 0;
+	},
+	canTwoPicDeleted : function(i1,j1,i2,j2,Trace){
+		//A(i1,j1),B(i2,j2)
+		if (i2 == -1 || j2 == -1) {
+			return false;
+		}
+		if (i1 == -1 || j1 == -1) {
+			return false;
+		}
+		if(i1 == i2 && j1 == j2) {
+			return false;
+		}
+		if (this.pic[i1][j1] == -1 || this.pic[i2][j2] == -1) {
+			return false;
+		}
+		if(!this.ignoreTuan){
+			if (this.pic[i1][j1] != this.pic[i2][j2]) {
+				return false;
+			}
+		}
+		if (this.pic[i1][j1] <= 0) {
+			return false;
+		}
+		var S = {};
+		var T = {}; 
+		S[i1+"|"+j1] = 0;
+		var connerNum = 0;
+		while(!S[i2+"|"+j2] && connerNum<3){
+			for(var s in S){
+				var pointArr = s.split("|");
+				var i = parseInt(pointArr[0]);
+				var j = parseInt(pointArr[1]);
+				//从A点向上找空点
+				for(var m = i - 1; m >= 0; m--){
+					if(this.SearchPoint(T,Trace,connerNum,m,j,s)){
+						break;
+					}
+				}
+				//从A点向下找空点
+				for(var m = i + 1; m < this.HEIGHT; m++){
+					if(this.SearchPoint(T,Trace,connerNum,m,j,s)){
+						break;
+					}
+				}
+				//从A点向左找空点
+				for(var n = j - 1; n >= 0; n--){
+					if(this.SearchPoint(T,Trace,connerNum,i,n,s)){
+						break;
+					}
+				}
+				//从A点向右找空点
+				for(var n = j + 1; n < this.WIDTH; n++){
+					if(this.SearchPoint(T,Trace,connerNum,i,n,s)){
+						break;
+					}
+				}
+			}
+			for(var x in T){
+				if(S[x] == null){		
+				    S[x] = T[x];	        
+				}
+			}
+			T={};
+			connerNum++;
+		}
+		return S[i2+"|"+j2] >= 0;
+	},
+	randomArr : function(arr){
+        var n = 0 , j = 0;
+        var newArr = [];
+        for(i=arr.length;i>=1;i--){
+			n=Math.floor(Math.random() * arr.length);
+			newArr[j] = arr[n];
+			arr.splice(n,1)
+			j++;
+        }
+        return newArr;
+	},
+	getPicNum : function(map){
+		var nodes = 0;
+		for (var i = 0; i < this.HEIGHT; i++ ) {
+			for(var j = 0; j < this.WIDTH; j++ ) {
+				nodes += map[i][j];
+			}
+		}
+		if(nodes % 2 != 0){
+			alert("地图出错！");
+			return false;
+		}
+		var picNum = [];
+		var randomPicNum = [];
+		var picCnt = -(nodes / 2);
+		for(var i = 0; i < picCnt; i++){
+			var randomI = parseInt(Math.random()*this.NUM_OF_PICTYPE + 1);
+			picNum.push(randomI);
+			picNum.push(randomI);
+		}
+		return this.randomArr(picNum);
+	},
+	addSelectedCss : function(i,j){
+		var selectDiv = getObj("select");
+		selectDiv.style.left = "-50px";
+		selectDiv.style.top = "-50px";
+		selectDiv.style.left = this.iconWidth * j + "px";
+		selectDiv.style.top = this.iconHeight * i + "px";
+	},
+	showDeletedImg : function(i,j,dec,imgStyle,time){
+		//dec表示闪电图案的方向，1表示垂直方向，0表示水平方向,imgStyle表示图片类型，是闪电还是爆炸图案。0表示闪电，1表示爆炸图案,time为packaging.js里面的间隔时间
+		var img = document.createElement("img");
+		img.className = "temp"; 
+		img.style.position = "absolute";
+		img.style.left = this.iconWidth * j + "px";
+		img.style.top = this.iconHeight * i + "px";
+		img.style.display = "block";
+		img.style.width = "32px";
+		img.style.height = "36px";
+		if(imgStyle == 0){
+			if(dec == 1){
+				img.src = "images/col.gif?"+(new Date()).getTime();
+			}else if(dec == 0){
+				img.src = "images/row.gif?"+(new Date()).getTime();
+			}	
+		}else if(imgStyle == 1){
+			img.src = "images/boom.gif?"+(new Date()).getTime();
+		}	
+		var gameArea = document.getElementById(this.gameArea);
+		gameArea.appendChild(img);	
+		// startMove(img,{opacity:0},function(){
+		// 	gameArea.removeChild(img);
+		// },time);	
+	},
+	showDeletedLine : function(i1,j1,i2,j2){
+		var maxVal;
+		var minVal;
+		if(i1 == i2){
+			maxVal = maxs(j1,j2);
+			minVal = mins(j1,j2);
+			for(var y = minVal ; y <= maxVal; y++){
+				this.showDeletedImg(i1,y,0,0,100);
+			}
+		}else if(j1 == j2){
+			maxVal = maxs(i1,i2);
+			minVal = mins(i1,i2);
+			for(var x = minVal; x <= maxVal; x++){
+				this.showDeletedImg(x,j1,1,0,100);
+			}
+		}
+		this.showDeletedImg(i1,j1,0,1,100);
+		this.showDeletedImg(i2,j2,0,1,100);
+
+	},
+	showDeletedPath : function(array){
+		var gameArea = getObj("gameArea");
+		var imgs = gameArea.getElementsByClassName("temp");
+		for(var i = imgs.length - 1; i >= 0; i--){
+			clearInterval(imgs[i].timer);
+			gameArea.removeChild(imgs[i]);
+		}
+		if(array == null){
+			return;
+		}else{
+			var beginx = array[0];
+			var beginy = array[1];
+			var i = 2;
+			while (i < array.length) {
+				var endx = array[i];
+				var endy = array[i+1];
+				if(beginx == endx){
+					this.showDeletedLine(beginx,beginy,endx,endy);
+				}
+				if(beginy == endy){
+					this.showDeletedLine(beginx,beginy,endx,endy);
+				}
+				beginx=endx;
+				beginy=endy;
+				i+=2;
+			}
+			this.soundelec.play();
+		}
+	},
+	numLeft : function(n){
+		var numLeft = getChildNodes("leftBox","span")[0];
+		numLeft.innerHTML = n;
+	},
+	score : function(){
+		return parseInt(-this.totalLeft + this.totalTime / 1000 - this.usedTime/1000) + "分";
+	},
+	isContinuousClick : function(t1,t2){
+		return Math.abs(t2 - t1) <= this.continuousHitTime;
+	},
+	getTimes : function(){
+		var date = new Date();
+		return date.getTime();
+	},
+	continuousHits : function(){
+		var comboInfo = getChildNodes("comboInfo","span")[0];
+		this.currentHitTime = this.getTimes();
+		if(this.isContinuousClick(this.currentHitTime,this.lastHitTime)){
+			this.currentHits++;
+			comboInfo.innerHTML = this.currentHits + "/" + this.mostContinuousHit;
+			this.lastHitTime = this.currentHitTime;
+		}else{
+			this.mostContinuousHit = maxs(this.currentHits,this.mostContinuousHit);
+			this.lastHitTime = this.currentHitTime;
+			this.currentHits = 1;
+			comboInfo.innerHTML = this.currentHits + "/" + this.mostContinuousHit;
+		}
+	},
+	initContinuousHits : function(){
+		var comboInfo = getChildNodes("comboInfo","span")[0];
+		this.lastHitTime = game.getTimes();
+		this.currentHitTime = 0;
+		this.mostContinuousHit = 0;
+		this.currentHits = 0;
+		comboInfo.innerHTML = "";
+	},
+	toolsDisabled : function(n,m){
+		this.modifyCompassCss(n);
+		this.modifyResetCss(n);
+		this.autoDeleteNum = m;
+		this.realignNum = m;
+	},
+	progressAndTime : function(n,gameMsg,timeLineImg,timeInfo,scoreBox){
+		if(this.usedTime < parseInt(this.totalTime)){
+			if(this.totalLeft > 0){
+				var speed = (this.progressBarWidth - this.progresserCurrentWidth) / (this.totalTime - this.usedTime); 
+				/*console.log("this.totalTime:" + this.totalTime);
+				console.log("this.totalTime:" + this.totalTime);*/
+				this.progresserCurrentWidth += speed * n;
+				timeLineImg.style.width = this.progresserCurrentWidth + "px";
+				/*this.progresserCurrentWidth = this.initProgressBarWidth*/
+				this.usedTime += n;
+				timeInfo.innerHTML = changeTwoDecimal(this.usedTime/1000) + "秒";
+			}else{
+				gameMsg.style.display = "block";
+				gameMsg.className = "win";
+				this.toolsDisabled(0,-1);
+				scoreBox.innerHTML = this.score();
+				this.soundend.play();
+				clearInterval(this.timer);
+				return false;
+			}
+		}else{
+			gameMsg.style.display = "block";
+			gameMsg.className = "lose";
+			this.toolsDisabled(0,-1);
+			scoreBox.innerHTML = this.score();
+			this.soundend.play();
+			clearInterval(this.timer);
+			return false;
+		}
+	},
+	modifyMap : function(map,x,y){
+		map[x][y] = 0;
+	},
+	modifyCompassCss : function(n){
+		var compass = getObj("compass");
+		compass.style.backgroundPosition = - 24*n + "px 0px";
+	},
+	autoDeletedImg : function(n){
+		var _this = this;
+		var o = {};
+		var a = [];
+		if(_this.autoDeleteNum < n && _this.autoDeleteNum >= 0){
+			for(var i = 0; i<_this.HEIGHT; i++){
+				for(var j = 0; j < _this.WIDTH; j++){
+					for(var k = 0; k<_this.HEIGHT; k++){
+						for(var l = 0; l < _this.WIDTH; l++){
+							if(_this.canTwoPicDeleted(i,j,k,l,o)){
+								a.push(i + "|" + j + "|" + k + "|" + l);
+							}
+						}
+					}
+				}
+			}
+			if(a.length <= 0){
+				alert("地图无解，将重新排列");
+				_this.realignMap(3);
+			}else{
+				var randomArray = _this.randomArr(a);
+				var tipPoint = randomArray.pop();
+				var i1 = parseInt(tipPoint.split("|")[0]);
+				var j1 = parseInt(tipPoint.split("|")[1]);
+				var i2 = parseInt(tipPoint.split("|")[2]);
+				var j2 = parseInt(tipPoint.split("|")[3]);
+				_this.showDeletedImg(i1,j1,0,1,100);
+				_this.showDeletedImg(i2,j2,0,1,100);
+				_this.soundelec.play();
+				_this.autoDeleteNum++;
+				_this.modifyCompassCss(n - _this.autoDeleteNum);
+			}
+		}else{
+			return;
+		}
+	},
+	modifyResetCss : function(n){
+		var resets = getObj("reset");
+		resets.style.backgroundPosition = - 24*n + "px 0px";
+	},
+	realignMap : function(n){
+		var _this = this;
+		if(_this.realignNum < n && _this.realignNum >= 0){
+			_this.initGame(_this.templateMap);
+			_this.realignNum++;
+			_this.modifyResetCss(n - _this.realignNum);
+		}else{
+			return;
+		}
+	},
+	clickNode : function(map,x,y){
+		var trace = {};
+		var keyPoint = [];
+		if(this.canTwoPicDeleted(x,y,this.selectedPic.x,this.selectedPic.y, trace)){
+			this.continuousHits();
+			var target = this.selectedPic.x + "|" + this.selectedPic.y;
+			keyPoint.push(this.selectedPic.x);
+			keyPoint.push(this.selectedPic.y);
+			while(target != x+"|"+y) {
+				target = trace[target];
+				var targetX = parseInt(target.split("|")[0]);
+				var targetY = parseInt(target.split("|")[1]);
+				keyPoint.push(targetX);
+				keyPoint.push(targetY);
+			}
+			this.showDeletedPath(keyPoint);			
+			this.deleteOnePic(x,y);
+			this.modifyMap(map,x,y);
+			this.deleteOnePic(this.selectedPic.x,this.selectedPic.y);
+			this.modifyMap(map,this.selectedPic.x,this.selectedPic.y);
+			this.numLeft(this.totalLeft);
+			this.clearSelected();
+			this.addSelectedCss(-1,-1);
+		}else{
+			this.setSelected(x,y);
+			if(game.pic[this.selectedPic.x][this.selectedPic.y] != 0 ){
+				this.addSelectedCss(this.selectedPic.x,this.selectedPic.y);
+				this.soundsel.play();
+			}
+			else{
+				return;
+			}
+		}
+	},
+	addStyle:function(x,y){
+		if (!this.nodemaps) {
+			this.nodemaps = getChildNodes(this.tableid,"td");
+		}
+		this.nodemaps[x*this.WIDTH +y].style.opacity = 0.3;
+	},
+	testClickNode : function(x1,y1,x2,y2){
+		var from = {};
+		if(this.canTwoPicDeleted(x1,y1,x2,y2,from)){
+			if(this.pic[x2][y2] == 0){
+				return false;
+			}
+			this.addStyle(x1,y1);
+			this.addStyle(x2,y2);
+		}else{
+			return false;
+		}
+	},
+	deleteCss:function(){
+		if (!this.nodemaps) {
+			this.nodemaps = getChildNodes(this.tableid,"td");
+		}
+		for(var i = 0; i < this.nodemaps.length ; i++){
+			this.nodemaps[i].style.opacity = 1;
+		}
+	},
+	initGame : function(map){
+		this.totalLeft = 0;
+		var picArr=this.getPicNum(map);
+		this.pic = new Array(this.HEIGHT);
+		for (var i = 0; i < this.HEIGHT; i++ ) {
+			this.pic[i] = new Array(this.WIDTH);
+			for (var j = 0; j < this.WIDTH; j++ ) {				 
+				if (map[i][j] < 0) {
+					this.pic[i][j] = picArr.pop();
+				} else {
+					this.pic[i][j] = map[i][j];
+				}
+				if (this.pic[i][j] > 0) {
+					this.totalLeft++;
+				}
+			}
+		}
+		this.showAllPics();
+	}
+}
+function mapInfo(n){
+	var mapImage = getObj("mapImage");
+	var img = document.createElement("img");
+	mapImage.innerHTML = "";
+	img.src = allmaps[n].BigImg;
+	mapImage.appendChild(img);	
+	var mapInfo = getChildNodes("mapDetail","span");
+	mapInfo[0].innerHTML = allmaps[n].name;
+	mapInfo[1].innerHTML = allmaps[n].level;
+	mapInfo[2].innerHTML = allmaps[n].imgNum;
+	mapInfo[3].innerHTML = allmaps[n].author;
+}
+function addMap(mapList,n){
+	var arr = [];
+	for(var r = 1; r <= n; r++){
+		arr.push(r);
+	}
+	var newArr = game.randomArr(arr);
+	for(var j = 0; j < 5; j++){
+		var k = newArr.pop();
+		var img = document.createElement("img");
+		img.border = 0;
+		img.title = "地图" + k;
+		img.src = allmaps[k].Img;
+		var div = document.createElement("div");
+		div.title = "双击地图开始";
+		div.innerHTML = allmaps[k].name;
+		var li = document.createElement("li");
+		li.appendChild(img);
+		li.appendChild(div);
+		mapList.appendChild(li);
+	}
+}
+function clickMap(mapList){
+	var objs = getChildNodes(mapList,"img");
+	var m;
+	for(var p = 0; p < objs.length; p++){
+		objs[p].ondblclick = function(){
+			m = parseInt(this.title.replace("地图",""));
+			for(var q = 0; q < objs.length; q++){
+				objs[q].style.borderWidth = "0px";
+			}
+			this.style.borderWidth = "2px";
+			this.style.borderStyle = "solid";
+			this.style.borderColor = "yellow";
+			start(m);
+		}
+	}
+}
+function start(n){
+	game.initContinuousHits();
+	game.toolsDisabled(3,0);
+	game.usedTime = 0;
+	game.totalLeft = 0;
+	game.progresserCurrentWidth = 0;
+	var gameMsg = getObj("gameMsg");
+	gameMsg.style.display = "none";
+	clearInterval(game.timer);
+	if(n == null ){
+		n = parseInt(Math.random() * game.mapNum + 1);
+	}
+	mapInfo(n);
+	//game.templateMap = map = allmaps[n].map;
+	game.templateMap = new Array(game.HEIGHT);
+	for (var i = 0; i < game.HEIGHT; i++ ) {
+		game.templateMap[i] = new Array(game.WIDTH);
+		for (var j = 0; j < game.WIDTH; j++ ) {				 
+			game.templateMap[i][j] = allmaps[n].map[i][j];
+		}
+	}
+	game.initGame(allmaps[n].map);
+	game.totalLeft = allmaps[n].imgNum;
+	game.numLeft(game.totalLeft);
+	game.soundstart.play();
+	for(var i = 0; i <game.nodemaps.length; i++){
+		if(!game.debug){
+			(function(n){
+				game.nodemaps[n].onclick = function(){
+					var x = Math.floor(n/game.WIDTH);
+					var y = n%game.WIDTH;
+					game.clickNode(game.templateMap,x, y);
+				};
+			}
+			)(i);
+		}else if(game.debug){
+			(function(m){
+				game.nodemaps[m].onclick = function(){
+					game.deleteCss();
+					var x = Math.floor(m/game.WIDTH);
+					var y = m%game.WIDTH;
+					for(var j = 0; j <game.nodemaps.length; j++){
+						(function(k){
+							var _x = Math.floor(k/game.WIDTH);
+							var _y = k%game.WIDTH;
+							game.testClickNode(x,y,_x,_y);
+						})(j);
+					}
+				}
+			})(i);
+		}
+	}
+	game.timer = setInterval(function (){
+		var gameMsg = getObj("gameMsg");
+		var timeLineImg = getObj("timeLineImg");
+		var timeInfo = getChildNodes("timeInfo","span")[0];
+		var scoreBox = getObj("score");
+		game.progressAndTime(100,gameMsg,timeLineImg,timeInfo,scoreBox);
+	},100);
+}
+function getValueOfSelect(obj){
+	var oIndex = obj.selectedIndex;   //找到选中的滚动方式
+    return obj.options[oIndex].value;   //找到选中方式对应的值
+}
+function showShadeLayer(obj,w,h){
+	obj.style.display = "block";  
+	obj.style.position = "absolute";  
+	obj.style.top = "50%";  
+	obj.style.left = "50%";  
+	obj.style.marginTop = -h/2 + "px";  
+	obj.style.marginLeft = -w/2 + "px";  
+  
+    mybg.style.display = "block"; 
+	mybg.style.background = "#000";  
+	mybg.style.width = "100%";  
+	mybg.style.height = "100%";  
+	mybg.style.position = "absolute";  
+	mybg.style.top = "0";  
+	mybg.style.left = "0";  
+	mybg.style.zIndex = "500";  
+	mybg.style.opacity = "0.8";  
+	mybg.style.filter = "Alpha(opacity=80)";   
+	document.body.style.overflow = "hidden";  
+}
+var btnStart = getObj("btnStart");
+btnStart.onclick = function(){
+	if(game.selectedMapNum > 0){
+		start(game.selectedMapNum);
+	}else{
+	    start();
+	}
+}
+var mapList = getObj("mapList");
+addMap(mapList,game.mapNum);
+clickMap("mapList");
+var resets = getObj("reset");
+resets.onclick = function(){game.realignMap(3);}
+var compass = getObj("compass");
+compass.onclick = function(){game.autoDeletedImg(3);}
+
+//设置按钮
+var btnSet = getObj("btnSet");
+var setWindow = getObj("setWindow");
+var setClose = getObj("setClose");
+var mybg = getObj("mybg");
+var setSubmits = getObj("setSubmit");
+var gameTime= getObj("gameTime");
+var continuousHitsTime= getObj("continuousHitsTime");
+var v1 = 120000,v2 = 7000;
+gameTime.onchange = function(){   
+	v1 = getValueOfSelect(this); 
+}
+continuousHitsTime.onchange = function(){   
+	v2 = getValueOfSelect(this); 
+}
+btnSet.onclick = function(){
+	showShadeLayer(setWindow,300,200);
+}
+setSubmits.onclick = function(){
+	game.totalTime = v1;
+	game.continuousHitTime = v2;
+	setWindow.style.display = "none";
+	mybg.style.display = "none"; 
+}
+setClose.onclick = function(){
+	setWindow.style.display = "none";
+	mybg.style.display = "none";  
+}
+
+//选图按钮
+var btnSelMap = getObj("btnSelMap");
+var selectMapWindow = getObj("selectMapWindow");
+var selectMapClose = getObj("selectMapClose");
+var selectMapSubmits = getObj("selectMapSubmits");
+var maps = getChildNodes("con","img");
+var v3;
+btnSelMap.onclick = function(){
+	showShadeLayer(selectMapWindow,600,400);
+}
+selectMapClose.onclick = function(){
+	selectMapWindow.style.display = "none";
+	mybg.style.display = "none";  
+}
+for( var t = 0; t < maps.length; t++){
+	maps[t].onclick = function(){
+		v3 = parseInt(this.alt.replace("Map",""));
+		for(var q = 0; q < maps.length; q++){
+			maps[q].style.borderWidth = "0px";
+		}
+		this.style.borderWidth = "1px";
+		this.style.borderStyle = "solid";
+		this.style.borderColor = "yellow";
+	}
+}
+selectMapSubmits.onclick = function(){
+	game.selectedMapNum = v3;
+	selectMapWindow.style.display = "none";
+	mybg.style.display = "none"; 
+}
+//调用选项卡函数
+Tab(tag('tab','li'), tag('con','li'), 'click', '', 0);
+
+//退出按钮
+var btnExit = getObj("btnExit");
+var links = getObj("link");
+btnExit.onclick = function(){
+	startMove(links,{width:0,height:0,opacity:0},300);
+}
+</script>
+</body>
+</html>
