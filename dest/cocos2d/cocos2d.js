@@ -6961,7 +6961,6 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
         _t._viewName = "Cocos2dHTML5";
 
 	    var sys = cc.sys;
-        console.log(sys.os === sys.OS_IOS || sys.os === sys.OS_OSX);
         _t.enableRetina(sys.os === sys.OS_IOS || sys.os === sys.OS_OSX);
         cc.visibleRect && cc.visibleRect.init(_t._visibleRect);
 
@@ -7611,11 +7610,9 @@ cc.ContainerStrategy = cc.Class.extend(/** @lends cc.ContainerStrategy# */{
         locContainer.style.height = locCanvasElement.style.height = h + "px";
         // Setup pixel ratio for retina display
         var devicePixelRatio = view._devicePixelRatio = 1;
-        console.log(devicePixelRatio);
         if (view.isRetinaEnabled())
             devicePixelRatio = view._devicePixelRatio = window.devicePixelRatio || 1;
         // Setup canvas
-        console.log(devicePixelRatio);
         locCanvasElement.width = w * devicePixelRatio;
         locCanvasElement.height = h * devicePixelRatio;
         cc._renderContext.resetCache && cc._renderContext.resetCache();
@@ -8029,7 +8026,6 @@ cc.ResolutionPolicy.FIXED_WIDTH = 4;
  * Unknow policy
  */
 cc.ResolutionPolicy.UNKNOWN = 5;
-
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -29020,7 +29016,6 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
         this._renderContext.getContext().lineWidth = width * cc.view.getScaleX();
     }
 });
-
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
