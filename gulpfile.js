@@ -15,7 +15,7 @@ var path = {
   html: 'src/**/*.html',
   image: 'src/image/**/*',
   music: ['src/**/*.mp3', 'src/**/*.ogg']
-}
+};
 
 var dest = 'dest/'
 
