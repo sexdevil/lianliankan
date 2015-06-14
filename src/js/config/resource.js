@@ -1,5 +1,7 @@
 var res = {
-  background: 'image/gameBg.jpg'
+  background: 'image/gameBg.jpg',
+  tiles_png: 'image/tiles.png',
+  tiles_plist: 'image/tiles.plist'
   //rabbit_small_plist: 'image/rabbit-small.plist',
   //rabbit_small_png: 'image/rabbit-small.png',
   //rabbit_big_plist: 'image/rabbit-big.plist',

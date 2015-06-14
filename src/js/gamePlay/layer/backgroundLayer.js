@@ -9,11 +9,12 @@ var GPBackgroundLayer = cc.LayerColor.extend({
   },
 
   initBackground: function () {
-    var sptBg = new cc.Sprite(res.background);
-    sptBg.attr({
+    var gameBg = new cc.Sprite(res.background);
+    gameBg.attr({
       x: GC.w_2,
       y: GC.h_2
     });
-    this.addChild(sptBg);
+    this.addChild(gameBg);
+
   }
 });

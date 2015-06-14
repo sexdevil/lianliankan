@@ -19,18 +19,13 @@ var GamePlayLayer = cc.Layer.extend({
 
     this.addBackgroundLayer();
 
-    //this.addTouchLayer();
+    this.addTouchLayer();
   },
 
   addCache : function(){
 
-    //将plist添加到缓存
-    //cc.spriteFrameCache.addSpriteFrames(res.rabbit_small_plist);
-    //cc.spriteFrameCache.addSpriteFrames(res.rabbit_big_plist);
-    //cc.spriteFrameCache.addSpriteFrames(res.rabbit_win_plist);
-    //cc.spriteFrameCache.addSpriteFrames(res.rabbit_lose_plist);
-    //cc.spriteFrameCache.addSpriteFrames(res.icons_plist);
-    //cc.spriteFrameCache.addSpriteFrames(res.explosion_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.tiles_plist);
+
   },
 
 
