@@ -1,6 +1,10 @@
+var g_GPTouchLayer;
+
 var GPTouchLayer = cc.Layer.extend({
   ctor: function () {
     this._super();
+
+    g_GPTouchLayer = this;
 
     this.initBatchNode();
 
@@ -13,6 +17,15 @@ var GPTouchLayer = cc.Layer.extend({
     var texTiles = cc.textureCache.addImage(res.tiles_png);
     this.texTilesBatch = new cc.SpriteBatchNode(texTiles);
     this.addChild(this.texTilesBatch);
+
+    var texPipe = cc.textureCache.addImage(res.pipe_png);
+    this.texPipeBatch = new cc.SpriteBatchNode(texPipe);
+    this.addChild(this.texPipeBatch);
+
+    var texBoom = cc.textureCache.addImage(res.boom_png);
+    this.texBoomBatch = new cc.SpriteBatchNode(texBoom);
+    this.addChild(this.texBoomBatch);
+
   },
   initGame: function () {
     this.grid = new Grid(GC.gridW, GC.gridH);
@@ -62,10 +75,7 @@ var GPTouchLayer = cc.Layer.extend({
     var types = [];
     for (var i = 0; i < nodes / 2; i++) {
       var type = Math.random() * GC.type_count | 0 + 1;
-      type = '0' + type;
-      if (type.length === 2) {
-        type = '0' + type;
-      }
+      type = formatStr(type, 3);
       types.push(type);
       types.push(type);
     }
@@ -119,11 +129,10 @@ var GPTouchLayer = cc.Layer.extend({
     if (selectedTile) {
       var trace = {};
       if (this.canTwoTileDeleted(tile, selectedTile, trace)) {
-        this.grid.removeTile(tile);
-        this.grid.removeTile(selectedTile);
+        this.playDeleteAnimation(cc.p(tile.x, tile.y), cc.p(selectedTile.x, selectedTile.y), trace);
 
-        this.texTilesBatch.removeChild(tileSp);
-        this.texTilesBatch.removeChild(this.selectedTileSp);
+        this.removeTile(tileSp);
+        this.removeTile(this.selectedTileSp);
 
         this.selectedTileSp = null;
         this.selectNode.visible = false;
@@ -216,7 +225,7 @@ var GPTouchLayer = cc.Layer.extend({
       if (this.grid.cellOccupied(cc.p(x, y))) {
         if (!T[x + "|" + y]) {
           T[x + "|" + y] = connerNum;
-          if (trace[x + "|" + y] === null) {
+          if (trace[x + "|" + y] == undefined) {
             trace[x + "|" + y] = s;
           }
         }
@@ -224,6 +233,56 @@ var GPTouchLayer = cc.Layer.extend({
       }
     }
     return 0;
+  },
+  removeTile: function (tileSp) {
+
+    this.texTilesBatch.removeChild(tileSp);
+
+    this.grid.removeTile(tileSp.tile);
+  },
+  playDeleteAnimation: function (source, dest, trace) {
+    var target = dest.x + '|' + dest.y;
+    var start = source.x + '|' + source.y;
+    var keyPoints = [];
+    keyPoints.push(dest);
+    while (target !== start) {
+      target = trace[target];
+      var targetX = parseInt(target.split("|")[0]);
+      var targetY = parseInt(target.split("|")[1]);
+      keyPoints.push(cc.p(targetX, targetY));
+    }
+    this.playPipeAnimation(keyPoints);
+  },
+  playPipeAnimation: function (keyPoints) {
+    var len = keyPoints.length;
+    for (var i = 0; i < len - 1; i++) {
+      var current = keyPoints[i];
+      var next = keyPoints[i + 1];
+      if (current.x === next.x) {
+        var direction = 'col';
+        var yMin = Math.min(current.y, next.y);
+        var yMax = Math.max(current.y, next.y);
+        for (var j = yMin; j <= yMax; j++) {
+          addPipe.call(this, direction, cc.p(current.x, j));
+        }
+      } else {
+        var direction = 'row';
+        var xMin = Math.min(current.x, next.x);
+        var xMax = Math.max(current.x, next.x);
+        for (var j = xMin; j <= xMax; j++) {
+          addPipe.call(this, direction, cc.p(j, current.y));
+        }
+      }
+    }
+
+    function addPipe(direction, position) {
+      var pipeSp = new PipeSprite(direction);
+      pipeSp.x = GC.gridX + position.x * 31 + 31 / 2;
+      pipeSp.y = GC.gridY - position.y * 35 - 35 / 2;
+     
+      pipeSp.play();
+      this.texPipeBatch.addChild(pipeSp);
+    }
   },
   bindEvent: function () {
 

@@ -85,7 +85,11 @@ var maps = [map1, map10];
 var res = {
   background: 'image/gameBg.jpg',
   tiles_png: 'image/tiles.png',
-  tiles_plist: 'image/tiles.plist'
+  tiles_plist: 'image/tiles.plist',
+  pipe_png: 'image/pipe.png',
+  pipe_plist: 'image/pipe.plist',
+  boom_png: 'image/boom.png',
+  boom_plist: 'image/boom.plist'
   //rabbit_small_plist: 'image/rabbit-small.plist',
   //rabbit_small_png: 'image/rabbit-small.png',
   //rabbit_big_plist: 'image/rabbit-big.plist',
@@ -177,6 +181,16 @@ var Tile = cc.Class.extend({
 
 });
 
+function formatStr(num, length) {
+  num = num.toString();
+  var len = num.length;
+  var delta = length - len;
+  while (delta-- > 0) {
+    num = '0' + num;
+  }
+  return num;
+}
+
 var GPBackgroundLayer = cc.LayerColor.extend({
 
   ctor: function (color) {
@@ -193,14 +207,19 @@ var GPBackgroundLayer = cc.LayerColor.extend({
       x: GC.w_2,
       y: GC.h_2
     });
+
     this.addChild(gameBg);
 
   }
 });
 
+var g_GPTouchLayer;
+
 var GPTouchLayer = cc.Layer.extend({
   ctor: function () {
     this._super();
+
+    g_GPTouchLayer = this;
 
     this.initBatchNode();
 
@@ -213,6 +232,15 @@ var GPTouchLayer = cc.Layer.extend({
     var texTiles = cc.textureCache.addImage(res.tiles_png);
     this.texTilesBatch = new cc.SpriteBatchNode(texTiles);
     this.addChild(this.texTilesBatch);
+
+    var texPipe = cc.textureCache.addImage(res.pipe_png);
+    this.texPipeBatch = new cc.SpriteBatchNode(texPipe);
+    this.addChild(this.texPipeBatch);
+
+    var texBoom = cc.textureCache.addImage(res.boom_png);
+    this.texBoomBatch = new cc.SpriteBatchNode(texBoom);
+    this.addChild(this.texBoomBatch);
+
   },
   initGame: function () {
     this.grid = new Grid(GC.gridW, GC.gridH);
@@ -262,10 +290,7 @@ var GPTouchLayer = cc.Layer.extend({
     var types = [];
     for (var i = 0; i < nodes / 2; i++) {
       var type = Math.random() * GC.type_count | 0 + 1;
-      type = '0' + type;
-      if (type.length === 2) {
-        type = '0' + type;
-      }
+      type = formatStr(type, 3);
       types.push(type);
       types.push(type);
     }
@@ -319,11 +344,10 @@ var GPTouchLayer = cc.Layer.extend({
     if (selectedTile) {
       var trace = {};
       if (this.canTwoTileDeleted(tile, selectedTile, trace)) {
-        this.grid.removeTile(tile);
-        this.grid.removeTile(selectedTile);
+        this.playDeleteAnimation(cc.p(tile.x, tile.y), cc.p(selectedTile.x, selectedTile.y), trace);
 
-        this.texTilesBatch.removeChild(tileSp);
-        this.texTilesBatch.removeChild(this.selectedTileSp);
+        this.removeTile(tileSp);
+        this.removeTile(this.selectedTileSp);
 
         this.selectedTileSp = null;
         this.selectNode.visible = false;
@@ -416,7 +440,7 @@ var GPTouchLayer = cc.Layer.extend({
       if (this.grid.cellOccupied(cc.p(x, y))) {
         if (!T[x + "|" + y]) {
           T[x + "|" + y] = connerNum;
-          if (trace[x + "|" + y] === null) {
+          if (trace[x + "|" + y] == undefined) {
             trace[x + "|" + y] = s;
           }
         }
@@ -424,6 +448,56 @@ var GPTouchLayer = cc.Layer.extend({
       }
     }
     return 0;
+  },
+  removeTile: function (tileSp) {
+
+    this.texTilesBatch.removeChild(tileSp);
+
+    this.grid.removeTile(tileSp.tile);
+  },
+  playDeleteAnimation: function (source, dest, trace) {
+    var target = dest.x + '|' + dest.y;
+    var start = source.x + '|' + source.y;
+    var keyPoints = [];
+    keyPoints.push(dest);
+    while (target !== start) {
+      target = trace[target];
+      var targetX = parseInt(target.split("|")[0]);
+      var targetY = parseInt(target.split("|")[1]);
+      keyPoints.push(cc.p(targetX, targetY));
+    }
+    this.playPipeAnimation(keyPoints);
+  },
+  playPipeAnimation: function (keyPoints) {
+    var len = keyPoints.length;
+    for (var i = 0; i < len - 1; i++) {
+      var current = keyPoints[i];
+      var next = keyPoints[i + 1];
+      if (current.x === next.x) {
+        var direction = 'col';
+        var yMin = Math.min(current.y, next.y);
+        var yMax = Math.max(current.y, next.y);
+        for (var j = yMin; j <= yMax; j++) {
+          addPipe.call(this, direction, cc.p(current.x, j));
+        }
+      } else {
+        var direction = 'row';
+        var xMin = Math.min(current.x, next.x);
+        var xMax = Math.max(current.x, next.x);
+        for (var j = xMin; j <= xMax; j++) {
+          addPipe.call(this, direction, cc.p(j, current.y));
+        }
+      }
+    }
+
+    function addPipe(direction, position) {
+      var pipeSp = new PipeSprite(direction);
+      pipeSp.x = GC.gridX + position.x * 31 + 31 / 2;
+      pipeSp.y = GC.gridY - position.y * 35 - 35 / 2;
+     
+      pipeSp.play();
+      this.texPipeBatch.addChild(pipeSp);
+    }
   },
   bindEvent: function () {
 
@@ -457,6 +531,8 @@ var GamePlayLayer = cc.Layer.extend({
   addCache : function(){
 
     cc.spriteFrameCache.addSpriteFrames(res.tiles_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.pipe_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.boom_plist);
 
   },
 
@@ -470,6 +546,61 @@ var GamePlayLayer = cc.Layer.extend({
   addTouchLayer : function(){
     this.touchLayer = new GPTouchLayer();
     this.addChild(this.touchLayer);
+  }
+});
+
+var BoomSprite = cc.Sprite.extend({
+
+  ctor: function () {
+
+    var frame = cc.spriteFrameCache.getSpriteFrame('00.png');
+    this._super(frame);
+  },
+  play: function () {
+    var animFrames = [];
+    for (var i = 0; i < 19; i++) {
+      var str = 'boom' + formatStr(i, 2) + '.png';
+      var frame = cc.spriteFrameCache.getSpriteFrame(str);
+      animFrames.push(frame);
+    }
+    var animation = new cc.Animation(animFrames, 0.1);
+
+    this.runAction(cc.sequence(
+      cc.animate(animation),
+      cc.callFunc(this.destroy, this)
+    ));
+
+  },
+
+  destroy: function () {
+    g_GPTouchLayer.texPipeBatch.removeChild(this);
+  }
+});
+
+var PipeSprite = cc.Sprite.extend({
+
+  ctor: function (direction) {
+    this.direction = direction;
+    var frame = cc.spriteFrameCache.getSpriteFrame(direction + '00.png');
+    this._super(frame);
+  },
+  play: function () {
+    var animFrames = [];
+    for (var i = 0; i < 10; i++) {
+      var str = this.direction + formatStr(i, 2) + '.png';
+      var frame = cc.spriteFrameCache.getSpriteFrame(str);
+      animFrames.push(frame);
+    }
+    var animation = new cc.Animation(animFrames, 0.1);
+
+    this.runAction(cc.sequence(
+      cc.animate(animation),
+      cc.callFunc(this.destroy, this)
+    ));
+  },
+
+  destroy: function () {
+    g_GPTouchLayer.texPipeBatch.removeChild(this);
   }
 });
 

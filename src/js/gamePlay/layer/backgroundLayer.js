@@ -14,6 +14,7 @@ var GPBackgroundLayer = cc.LayerColor.extend({
       x: GC.w_2,
       y: GC.h_2
     });
+
     this.addChild(gameBg);
 
   }
