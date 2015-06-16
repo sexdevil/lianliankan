@@ -5,7 +5,7 @@ var res = {
   pipe_png: 'image/pipe.png',
   pipe_plist: 'image/pipe.plist',
   boom_png: 'image/boom.png',
-  boom_plist: 'image/boom.plist'
+  boom_plist: 'image/boom.plist',
   //rabbit_small_plist: 'image/rabbit-small.plist',
   //rabbit_small_png: 'image/rabbit-small.png',
   //rabbit_big_plist: 'image/rabbit-big.plist',
@@ -20,9 +20,11 @@ var res = {
   //explosion_png: 'image/explosion.png',
   //background: 'image/background.jpg',
   //
-  //bg_music: 'music/gamebg.mp3',
+  bg_music: 'music/bg.mp3',
+  boom_music: 'music/boom.mp3',
+  sel_music: 'music/sel.mp3'
   //cake_music: 'music/cake.mp3',
-  //boom_music: 'music/boom.mp3',
+
   //win_music: 'music/win.mp3',
   //lose_music: 'music/lose.mp3',
   //lessboom_music: 'music/lessboom.mp3',

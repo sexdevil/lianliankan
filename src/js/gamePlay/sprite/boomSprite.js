@@ -12,7 +12,7 @@ var BoomSprite = cc.Sprite.extend({
       var frame = cc.spriteFrameCache.getSpriteFrame(str);
       animFrames.push(frame);
     }
-    var animation = new cc.Animation(animFrames, 0.1);
+    var animation = new cc.Animation(animFrames, 0.05);
 
     this.runAction(cc.sequence(
       cc.animate(animation),
@@ -22,6 +22,6 @@ var BoomSprite = cc.Sprite.extend({
   },
 
   destroy: function () {
-    g_GPTouchLayer.texPipeBatch.removeChild(this);
+    g_GPTouchLayer.texBoomBatch.removeChild(this);
   }
 });
