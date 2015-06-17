@@ -51,7 +51,7 @@ FUI.soundComponent.prototype={
 		}
 	}
 };
-/*var sd=new FUI.soundComponent({src:'elec.mp3',altSrc:'elec.mp3'});
+/*var sd=new FUI.soundComponent({src:'boom.mp3',altSrc:'boom.mp3'});
 $('.fui-btn').bind('click',function(e){
     sd.play();
 });*/
