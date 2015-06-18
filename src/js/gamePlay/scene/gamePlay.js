@@ -27,6 +27,8 @@ var GamePlayLayer = cc.Layer.extend({
     cc.spriteFrameCache.addSpriteFrames(res.tiles_plist);
     cc.spriteFrameCache.addSpriteFrames(res.pipe_plist);
     cc.spriteFrameCache.addSpriteFrames(res.boom_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.icon_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.result_plist);
 
   },
 

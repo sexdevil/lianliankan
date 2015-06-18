@@ -12,7 +12,7 @@ var BoomSprite = cc.Sprite.extend({
       var frame = cc.spriteFrameCache.getSpriteFrame(str);
       animFrames.push(frame);
     }
-    var animation = new cc.Animation(animFrames, 0.05);
+    var animation = new cc.Animation(animFrames, 0.1);
 
     this.runAction(cc.sequence(
       cc.animate(animation),

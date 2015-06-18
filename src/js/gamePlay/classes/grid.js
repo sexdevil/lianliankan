@@ -45,3 +45,11 @@ Grid.prototype.withinBounds = function (position) {
     position.y >= 0 && position.y < this.height;
 };
 
+Grid.prototype.eachCell = function (callback) {
+  for (var x = 0; x < this.width; x++) {
+    for (var y = 0; y < this.height; y++) {
+      callback(this.cells[x][y]);
+    }
+  }
+};
+

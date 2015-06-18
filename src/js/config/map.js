@@ -187,7 +187,7 @@ var maps = {
   map10: {
     name: "map10",
     level: "困难",
-    imgNum: 122,
+    tileNum: 122,
     author: "zxq",
     path: [
       [0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0],

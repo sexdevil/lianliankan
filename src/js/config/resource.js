@@ -6,6 +6,10 @@ var res = {
   pipe_plist: 'image/pipe.plist',
   boom_png: 'image/boom.png',
   boom_plist: 'image/boom.plist',
+  icon_png: 'image/icon.png',
+  icon_plist: 'image/icon.plist',
+  result_png: 'image/result.png',
+  result_plist: 'image/result.plist',
   //rabbit_small_plist: 'image/rabbit-small.plist',
   //rabbit_small_png: 'image/rabbit-small.png',
   //rabbit_big_plist: 'image/rabbit-big.plist',
@@ -22,7 +26,12 @@ var res = {
   //
   bg_music: 'music/bg.mp3',
   boom_music: 'music/boom.mp3',
-  sel_music: 'music/sel.mp3'
+  sel_music: 'music/sel.mp3',
+  end_music: 'music/end.mp3',
+  start_music: 'music/start.mp3',
+  zhangsheng_music: 'music/zhangsheng.mp3',
+  koushao_music: 'music/koushao.mp3',
+  jianjiao_music: 'music/jianjiao.mp3'
   //cake_music: 'music/cake.mp3',
 
   //win_music: 'music/win.mp3',
