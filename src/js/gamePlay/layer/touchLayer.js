@@ -34,6 +34,10 @@ var GPTouchLayer = cc.Layer.extend({
     this.texResultBatch = new cc.SpriteBatchNode(texResult);
     this.addChild(this.texResultBatch);
 
+    var texProp = cc.textureCache.addImage(res.prop_png);
+    this.texPropBatch = new cc.SpriteBatchNode(texProp);
+    this.addChild(this.texPropBatch);
+
   },
   initGame: function () {
     this.grid = new Grid(GC.grid.width, GC.grid.height);
@@ -48,6 +52,10 @@ var GPTouchLayer = cc.Layer.extend({
 
     this.maxContinueHit = -1;
 
+    this.resetCount = GC.reset.count;
+
+    this.compassCount = GC.compass.count;
+
     this.initMap();
 
     this.initTiles();
@@ -61,6 +69,8 @@ var GPTouchLayer = cc.Layer.extend({
     this.addTimeline();
 
     this.addRest();
+
+    this.addProps();
 
     this.scheduleUpdate();
 
@@ -148,30 +158,10 @@ var GPTouchLayer = cc.Layer.extend({
     this.texTilesBatch.addChild(tileSp);
 
     var me = this;
-    cc.eventManager.addListener({
-      event: cc.EventListener.TOUCH_ONE_BY_ONE,
-      swallowTouches: true,
-      onTouchBegan: function (touch, event) {
-        var target = event.getCurrentTarget();
-        var locationInNode = target.convertToNodeSpace(touch.getLocation());
-        var s = target.getContentSize();
-        var rect = cc.rect(0, 0, s.width, s.height);
+    addClickListener(tileSp, function (target) {
+      this.selectTile(target);
+    }, this);
 
-        if (cc.rectContainsPoint(rect, locationInNode)) {
-          return true;
-        }
-        return false;
-      },
-      onTouchMoved: function (touch, event) {
-
-      },
-      onTouchEnded: function (touch, event) {
-        var target = event.getCurrentTarget();
-
-        me.selectTile(target);
-
-      }
-    }, tileSp);
   },
   selectTile: function (tileSp) {
     var tile = tileSp.tile;
@@ -179,48 +169,9 @@ var GPTouchLayer = cc.Layer.extend({
     if (selectedTile) {
       var trace = {};
       if (this.canTwoTileDeleted(tile, selectedTile, trace)) {
-        this.playDeleteAnimation(cc.p(tile.x, tile.y), cc.p(selectedTile.x, selectedTile.y), trace);
-
-        this.removeTile(tileSp);
-        this.removeTile(this.selectedTileSp);
-
+        this.deleteTwoTiles(tileSp, tile, this.selectedTileSp, selectedTile, trace);
         this.selectedTileSp = null;
         this.selectNode.visible = false;
-
-        if (this.spendTime < GC.continueHit.time) {
-          this.continueHit++;
-          if (this.continueHit > this.maxContinueHit) {
-            this.maxContinueHit = this.continueHit;
-          }
-          if (this.continueHit > 0) {
-            this.showContinueHit();
-            switch (this.continueHit) {
-              case GC.continueHit.zhangsheng:
-                cc.audioEngine.playEffect(res.zhangsheng_music);
-                break;
-              case  GC.continueHit.koushao:
-                cc.audioEngine.playEffect(res.koushao_music);
-                break;
-              case GC.continueHit.jianjiao:
-                cc.audioEngine.playEffect(res.jianjiao_music);
-                break;
-            }
-          }
-        } else {
-          this.continueHit = 0;
-        }
-
-        this.spendTime = 0;
-
-        this.rest -= 2;
-        this.restSp.update(this.rest);
-
-        cc.audioEngine.playEffect(res.boom_music);
-
-        if (!this.checkIsWin() && !this.checkMapResolve()) {
-          alert('地图无解');
-          this.rebuildTiles();
-        }
 
         return;
       }
@@ -315,6 +266,49 @@ var GPTouchLayer = cc.Layer.extend({
       }
     }
     return 0;
+  },
+  deleteTwoTiles: function (tileSp1, tile1, tileSp2, tile2, trace) {
+    this.playDeleteAnimation(cc.p(tile1.x, tile1.y), cc.p(tile2.x, tile2.y), trace);
+
+    this.removeTile(tileSp1);
+    this.removeTile(tileSp2);
+
+    if (this.spendTime < GC.continueHit.time) {
+      this.continueHit++;
+      if (this.continueHit > this.maxContinueHit) {
+        this.maxContinueHit = this.continueHit;
+      }
+      if (this.continueHit > 0) {
+        this.showContinueHit();
+        switch (this.continueHit) {
+          case GC.continueHit.zhangsheng:
+            cc.audioEngine.playEffect(res.zhangsheng_music);
+            break;
+          case  GC.continueHit.koushao:
+            cc.audioEngine.playEffect(res.koushao_music);
+            break;
+          case GC.continueHit.jianjiao:
+            cc.audioEngine.playEffect(res.jianjiao_music);
+            break;
+        }
+      }
+    } else {
+      this.continueHit = 0;
+    }
+
+    this.spendTime = 0;
+    this.timelineSp && this.timelineSp.update(this.spendTime);
+
+    this.rest -= 2;
+    this.restSp.update(this.rest);
+
+    cc.audioEngine.playEffect(res.boom_music);
+
+    if (!this.checkIsWin() && !this.checkMapResolve()) {
+      alert('地图无解');
+      this.rebuildTiles();
+    }
+
   },
   removeTile: function (tileSp) {
 
@@ -474,6 +468,36 @@ var GPTouchLayer = cc.Layer.extend({
     this.restSp.y = GC.rest.y;
     this.texIconBatch.addChild(this.restSp);
   },
+  addProps: function () {
+    var resetSp = new PropSprite('reset', this.resetCount);
+    resetSp.x = GC.reset.x;
+    resetSp.y = GC.reset.y;
+
+    this.texPropBatch.addChild(resetSp);
+
+    addClickListener(resetSp, function (target) {
+      if (this.resetCount > 0) {
+        target.update(--this.resetCount);
+        this.rebuildTiles();
+        cc.audioEngine.playEffect(res.flystar_music);
+      }
+    }, this);
+
+    var compassSp = new PropSprite('compass', this.compassCount);
+    compassSp.x = GC.compass.x;
+    compassSp.y = GC.compass.y;
+
+    this.texPropBatch.addChild(compassSp);
+
+    addClickListener(compassSp, function (target) {
+      if (this.compassCount > 0) {
+        target.update(--this.compassCount);
+        this.autoDelete();
+        cc.audioEngine.playEffect(res.flystar_music);
+      }
+    }, this);
+
+  },
   checkIsWin: function () {
     if (this.texTilesBatch.children.length === 0) {
       this.gameOver(true);
@@ -488,10 +512,12 @@ var GPTouchLayer = cc.Layer.extend({
           for (var l = 0; l < GC.grid.height; l++) {
             var tile1 = this.grid.cellContent(cc.p(i, j));
             var tile2 = this.grid.cellContent(cc.p(k, l));
-            if (this.canTwoTileDeleted(tile1, tile2, {})) {
+            var trace = {};
+            if (this.canTwoTileDeleted(tile1, tile2, trace)) {
               return {
                 tile1: tile1,
-                tile2: tile2
+                tile2: tile2,
+                trace: trace
               };
             }
           }
@@ -523,9 +549,32 @@ var GPTouchLayer = cc.Layer.extend({
       }
     });
 
-    if(!this.checkMapResolve()){
+    if (!this.checkMapResolve()) {
       this.rebuildTiles();
     }
+  },
+  autoDelete: function () {
+    var resolve = this.checkMapResolve();
+    var tile1 = resolve.tile1;
+    var tile2 = resolve.tile2;
+    var trace = resolve.trace;
+    var tileSp1 = this.getTileSpByTile(tile1);
+    var tileSp2 = this.getTileSpByTile(tile2);
+    this.deleteTwoTiles(tileSp1, tile1, tileSp2, tile2, trace);
+    if (tileSp1 === this.selectedTileSp || tileSp2 === this.selectedTileSp) {
+      this.selectedTileSp = null;
+      this.selectNode.visible = false;
+    }
+  },
+  getTileSpByTile: function (tile) {
+    var tileSp = null;
+    this.texTilesBatch.children.forEach(function (child) {
+      if (child.tile === tile) {
+        tileSp = child;
+        return false;
+      }
+    });
+    return tileSp;
   },
   gameOver: function (success) {
     this.state = GC.GAME_STATE.OVER;
@@ -540,9 +589,11 @@ var GPTouchLayer = cc.Layer.extend({
     resultSp.play();
     this.texResultBatch.addChild(resultSp);
 
-    this.texTilesBatch.children.forEach(function (child) {
-      cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE, child);
-    });
+    cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
+
+    //this.texTilesBatch.children.forEach(function (child) {
+    //  cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE, child);
+    //});
   },
   bindEvent: function () {
 

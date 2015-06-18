@@ -22,6 +22,18 @@ GC.grid = {
   height: 11
 };
 
+GC.reset = {
+  count: 3,
+  x: 630,
+  y: 400
+};
+
+GC.compass = {
+  count: 3,
+  x: 655,
+  y: 400
+};
+
 GC.timeline = {
   x: 20,
   y: 22,
