@@ -2,7 +2,7 @@ var BoomSprite = cc.Sprite.extend({
 
   ctor: function () {
 
-    var frame = cc.spriteFrameCache.getSpriteFrame('00.png');
+    var frame = '#boom00.png';
     this._super(frame);
   },
   play: function () {
@@ -12,7 +12,7 @@ var BoomSprite = cc.Sprite.extend({
       var frame = cc.spriteFrameCache.getSpriteFrame(str);
       animFrames.push(frame);
     }
-    var animation = new cc.Animation(animFrames, 0.05);
+    var animation = new cc.Animation(animFrames, 0.1);
 
     this.runAction(cc.sequence(
       cc.animate(animation),

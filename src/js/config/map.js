@@ -1,7 +1,8 @@
 var maps = {
   map1: {
-    name: 'map1',
-    level: '简单',
+    name: '四方',
+    level: '一般',
+    picName: 'map1',
     //Img : "images/maps/map1.gif",　
     //BigImg : "images/maps/map1B.gif",　
     tileNum: 76,
@@ -23,10 +24,9 @@ var maps = {
 
 
   map2: {
-    name: "map2",
+    name: "ILOVEYOU",
     level: "简单",
-//Img : "images/maps/map2.gif",　
-//BigImg : "images/maps/map2B.gif",　
+    picName: 'map2',
     tileNum: 72,
     author: "zxq",
     path: [
@@ -45,8 +45,9 @@ var maps = {
   },
 
   map3: {
-    name: "map3",
-    level: "一般",
+    name: "漩涡",
+    level: "困难",
+    picName: 'map3',
     tileNum: 96,
     author: "zxq",
     path: [
@@ -65,8 +66,9 @@ var maps = {
   },
 
   map4: {
-    name: "map4",
-    level: "一般",
+    name: "格调",
+    level: "简单",
+    picName: 'map4',
     tileNum: 92,
     author: "zxq",
     path: [
@@ -85,8 +87,9 @@ var maps = {
   },
 
   map5: {
-    name: "map5",
+    name: "男女",
     level: "一般",
+    picName: 'map5',
     tileNum: 102,
     author: "zxq",
     path: [
@@ -105,8 +108,9 @@ var maps = {
   },
 
   map6: {
-    name: "map6",
-    level: "一般",
+    name: "棋盘",
+    level: "难",
+    picName: 'map6',
     tileNum: 104,
     author: "zxq",
     path: [
@@ -125,8 +129,9 @@ var maps = {
   },
 
   map7: {
-    name: "map7",
-    level: "一般",
+    name: "围墙",
+    level: "难",
+    picName: 'map7',
     tileNum: 114,
     author: "zxq",
     path: [
@@ -145,8 +150,9 @@ var maps = {
   },
 
   map8: {
-    name: "map8",
+    name: "绝望",
     level: "困难",
+    picName: 'map8',
     tileNum: 152,
     author: "zxq",
     path: [
@@ -165,10 +171,11 @@ var maps = {
   },
 
   map9: {
-    name: "map9",
-    level: "困难",
+    name: "方阵",
+    level: '困难',
+    picName: 'map9',
     tileNum: 150,
-    author: "zxq",
+    author: 'zxq',
     path: [
       [-1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1],
       [-1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1],
@@ -185,10 +192,11 @@ var maps = {
   },
 
   map10: {
-    name: "map10",
-    level: "困难",
-    imgNum: 122,
-    author: "zxq",
+    name: '友谊',
+    level: '简单',
+    picName: 'map10',
+    tileNum: 122,
+    author: 'zxq',
     path: [
       [0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0],
       [0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],

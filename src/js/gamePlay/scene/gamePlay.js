@@ -24,9 +24,13 @@ var GamePlayLayer = cc.Layer.extend({
 
   addCache : function(){
 
-    cc.spriteFrameCache.addSpriteFrames(res.tiles_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.tile_plist);
     cc.spriteFrameCache.addSpriteFrames(res.pipe_plist);
     cc.spriteFrameCache.addSpriteFrames(res.boom_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.icon_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.result_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.prop_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.map_plist);
 
   },
 

@@ -1,37 +1,30 @@
 var res = {
   background: 'image/gameBg.jpg',
-  tiles_png: 'image/tiles.png',
-  tiles_plist: 'image/tiles.plist',
+  tile_png: 'image/tile.png',
+  tile_plist: 'image/tile.plist',
   pipe_png: 'image/pipe.png',
   pipe_plist: 'image/pipe.plist',
   boom_png: 'image/boom.png',
   boom_plist: 'image/boom.plist',
-  //rabbit_small_plist: 'image/rabbit-small.plist',
-  //rabbit_small_png: 'image/rabbit-small.png',
-  //rabbit_big_plist: 'image/rabbit-big.plist',
-  //rabbit_big_png: 'image/rabbit-big.png',
-  //rabbit_win_plist: 'image/rabbit-win.plist',
-  //rabbit_win_png: 'image/rabbit-win.png',
-  //rabbit_lose_plist: 'image/rabbit-lose.plist',
-  //rabbit_lose_png: 'image/rabbit-lose.png',
-  //icons_plist: 'image/icons.plist',
-  //icons_png: 'image/icons.png',
-  //explosion_plist: 'image/explosion.plist',
-  //explosion_png: 'image/explosion.png',
-  //background: 'image/background.jpg',
-  //
+  icon_png: 'image/icon.png',
+  icon_plist: 'image/icon.plist',
+  result_png: 'image/result.png',
+  result_plist: 'image/result.plist',
+  prop_png: 'image/prop.png',
+  prop_plist: 'image/prop.plist',
+  map_png: 'image/map.png',
+  map_plist: 'image/map.plist',
+
   bg_music: 'music/bg.mp3',
   boom_music: 'music/boom.mp3',
-  sel_music: 'music/sel.mp3'
-  //cake_music: 'music/cake.mp3',
+  sel_music: 'music/sel.mp3',
+  end_music: 'music/end.mp3',
+  start_music: 'music/start.mp3',
+  zhangsheng_music: 'music/zhangsheng.mp3',
+  koushao_music: 'music/koushao.mp3',
+  jianjiao_music: 'music/jianjiao.mp3',
+  flystar_music: 'music/flystar.mp3'
 
-  //win_music: 'music/win.mp3',
-  //lose_music: 'music/lose.mp3',
-  //lessboom_music: 'music/lessboom.mp3',
-  //clock_music: 'music/clock.mp3',
-  //life_music: 'music/life.mp3',
-  //basket_music: 'music/basket.mp3',
-  //jump_music: 'music/jump.mp3'
 };
 
 var g_resources = [];
