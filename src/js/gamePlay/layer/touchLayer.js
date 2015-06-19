@@ -14,7 +14,7 @@ var GPTouchLayer = cc.Layer.extend({
   },
   initBatchNode: function () {
 
-    var texTiles = cc.textureCache.addImage(res.tiles_png);
+    var texTiles = cc.textureCache.addImage(res.tile_png);
     this.texTilesBatch = new cc.SpriteBatchNode(texTiles);
     this.addChild(this.texTilesBatch);
 
@@ -25,10 +25,6 @@ var GPTouchLayer = cc.Layer.extend({
     var texBoom = cc.textureCache.addImage(res.boom_png);
     this.texBoomBatch = new cc.SpriteBatchNode(texBoom);
     this.addChild(this.texBoomBatch);
-
-    var texIcon = cc.textureCache.addImage(res.icon_png);
-    this.texIconBatch = new cc.SpriteBatchNode(texIcon);
-    this.addChild(this.texIconBatch);
 
     var texResult = cc.textureCache.addImage(res.result_png);
     this.texResultBatch = new cc.SpriteBatchNode(texResult);
@@ -57,6 +53,8 @@ var GPTouchLayer = cc.Layer.extend({
     this.compassCount = GC.compass.count;
 
     this.initMap();
+
+    this.addMapInfo();
 
     this.initTiles();
 
@@ -460,22 +458,22 @@ var GPTouchLayer = cc.Layer.extend({
     this.timelineSp = new TimelineSprite();
     this.timelineSp.x = GC.timeline.x;
     this.timelineSp.y = GC.timeline.y;
-    this.texIconBatch.addChild(this.timelineSp);
+    this.addChild(this.timelineSp);
   },
   addRest: function () {
     this.restSp = new RestSprite(this.rest);
     this.restSp.x = GC.rest.x;
     this.restSp.y = GC.rest.y;
-    this.texIconBatch.addChild(this.restSp);
+    this.addChild(this.restSp);
   },
   addProps: function () {
-    var resetSp = new PropSprite('reset', this.resetCount);
-    resetSp.x = GC.reset.x;
-    resetSp.y = GC.reset.y;
+    this.resetSp = new PropSprite('reset', this.resetCount);
+    this.resetSp.x = GC.reset.x;
+    this.resetSp.y = GC.reset.y;
 
-    this.texPropBatch.addChild(resetSp);
+    this.texPropBatch.addChild(this.resetSp);
 
-    addClickListener(resetSp, function (target) {
+    addClickListener(this.resetSp, function (target) {
       if (this.resetCount > 0) {
         target.update(--this.resetCount);
         this.rebuildTiles();
@@ -483,13 +481,13 @@ var GPTouchLayer = cc.Layer.extend({
       }
     }, this);
 
-    var compassSp = new PropSprite('compass', this.compassCount);
-    compassSp.x = GC.compass.x;
-    compassSp.y = GC.compass.y;
+    this.compassSp = new PropSprite('compass', this.compassCount);
+    this.compassSp.x = GC.compass.x;
+    this.compassSp.y = GC.compass.y;
 
-    this.texPropBatch.addChild(compassSp);
+    this.texPropBatch.addChild(this.compassSp);
 
-    addClickListener(compassSp, function (target) {
+    addClickListener(this.compassSp, function (target) {
       if (this.compassCount > 0) {
         target.update(--this.compassCount);
         this.autoDelete();
@@ -497,6 +495,12 @@ var GPTouchLayer = cc.Layer.extend({
       }
     }, this);
 
+  },
+  addMapInfo: function () {
+    this.mapInfoSp = new MapInfoSprite(this.map);
+    this.mapInfoSp.x = GC.mapInfo.x;
+    this.mapInfoSp.y = GC.mapInfo.y;
+    this.addChild(this.mapInfoSp);
   },
   checkIsWin: function () {
     if (this.texTilesBatch.children.length === 0) {
@@ -589,11 +593,15 @@ var GPTouchLayer = cc.Layer.extend({
     resultSp.play();
     this.texResultBatch.addChild(resultSp);
 
-    cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
+    //cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
 
-    //this.texTilesBatch.children.forEach(function (child) {
-    //  cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE, child);
-    //});
+    this.texTilesBatch.children.forEach(function (child) {
+      cc.eventManager.removeListeners(child);
+    });
+
+    cc.eventManager.removeListeners(this.resetSp);
+    cc.eventManager.removeListeners(this.compassSp);
+
   },
   bindEvent: function () {
 

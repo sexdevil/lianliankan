@@ -1,7 +1,7 @@
 var res = {
   background: 'image/gameBg.jpg',
-  tiles_png: 'image/tiles.png',
-  tiles_plist: 'image/tiles.plist',
+  tile_png: 'image/tile.png',
+  tile_plist: 'image/tile.plist',
   pipe_png: 'image/pipe.png',
   pipe_plist: 'image/pipe.plist',
   boom_png: 'image/boom.png',
@@ -12,6 +12,8 @@ var res = {
   result_plist: 'image/result.plist',
   prop_png: 'image/prop.png',
   prop_plist: 'image/prop.plist',
+  map_png: 'image/map.png',
+  map_plist: 'image/map.plist',
 
   bg_music: 'music/bg.mp3',
   boom_music: 'music/boom.mp3',

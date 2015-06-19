@@ -1,10 +1,12 @@
 cc.game.onStart = function(){
 
-  //cc.view.adjustViewPort(true);
+  cc.view.enableRetina(true);
+
+  cc.view.adjustViewPort(true);
   //
-  //cc.view.setDesignResolutionSize(800, 600, cc.ResolutionPolicy.SHOW_ALL);
+  cc.view.setDesignResolutionSize(800, 600, cc.ResolutionPolicy.SHOW_ALL);
   //
-  //cc.view.resizeWithBrowserSize(true);
+  cc.view.resizeWithBrowserSize(true);
 
   cc.LoaderScene.preload(g_resources, function () {
     //cc.director.setProjection(cc.Director.PROJECTION_2D);
@@ -49,6 +51,11 @@ GC.compass = {
   y: 400
 };
 
+GC.mapInfo = {
+  x: 702,
+  y: 300
+};
+
 GC.timeline = {
   x: 20,
   y: 22,
@@ -80,8 +87,9 @@ GC.eachTime = 30;
 
 var maps = {
   map1: {
-    name: 'map1',
-    level: '简单',
+    name: '四方',
+    level: '一般',
+    picName: 'map1',
     //Img : "images/maps/map1.gif",　
     //BigImg : "images/maps/map1B.gif",　
     tileNum: 76,
@@ -103,10 +111,9 @@ var maps = {
 
 
   map2: {
-    name: "map2",
+    name: "ILOVEYOU",
     level: "简单",
-//Img : "images/maps/map2.gif",　
-//BigImg : "images/maps/map2B.gif",　
+    picName: 'map2',
     tileNum: 72,
     author: "zxq",
     path: [
@@ -125,8 +132,9 @@ var maps = {
   },
 
   map3: {
-    name: "map3",
-    level: "一般",
+    name: "漩涡",
+    level: "困难",
+    picName: 'map3',
     tileNum: 96,
     author: "zxq",
     path: [
@@ -145,8 +153,9 @@ var maps = {
   },
 
   map4: {
-    name: "map4",
-    level: "一般",
+    name: "格调",
+    level: "简单",
+    picName: 'map4',
     tileNum: 92,
     author: "zxq",
     path: [
@@ -165,8 +174,9 @@ var maps = {
   },
 
   map5: {
-    name: "map5",
+    name: "男女",
     level: "一般",
+    picName: 'map5',
     tileNum: 102,
     author: "zxq",
     path: [
@@ -185,8 +195,9 @@ var maps = {
   },
 
   map6: {
-    name: "map6",
-    level: "一般",
+    name: "棋盘",
+    level: "难",
+    picName: 'map6',
     tileNum: 104,
     author: "zxq",
     path: [
@@ -205,8 +216,9 @@ var maps = {
   },
 
   map7: {
-    name: "map7",
-    level: "一般",
+    name: "围墙",
+    level: "难",
+    picName: 'map7',
     tileNum: 114,
     author: "zxq",
     path: [
@@ -225,8 +237,9 @@ var maps = {
   },
 
   map8: {
-    name: "map8",
+    name: "绝望",
     level: "困难",
+    picName: 'map8',
     tileNum: 152,
     author: "zxq",
     path: [
@@ -245,10 +258,11 @@ var maps = {
   },
 
   map9: {
-    name: "map9",
-    level: "困难",
+    name: "方阵",
+    level: '困难',
+    picName: 'map9',
     tileNum: 150,
-    author: "zxq",
+    author: 'zxq',
     path: [
       [-1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1],
       [-1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1],
@@ -265,10 +279,11 @@ var maps = {
   },
 
   map10: {
-    name: "map10",
-    level: "困难",
+    name: '友谊',
+    level: '简单',
+    picName: 'map10',
     tileNum: 122,
-    author: "zxq",
+    author: 'zxq',
     path: [
       [0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0],
       [0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -293,8 +308,8 @@ for (var i in maps) {
 
 var res = {
   background: 'image/gameBg.jpg',
-  tiles_png: 'image/tiles.png',
-  tiles_plist: 'image/tiles.plist',
+  tile_png: 'image/tile.png',
+  tile_plist: 'image/tile.plist',
   pipe_png: 'image/pipe.png',
   pipe_plist: 'image/pipe.plist',
   boom_png: 'image/boom.png',
@@ -305,6 +320,8 @@ var res = {
   result_plist: 'image/result.plist',
   prop_png: 'image/prop.png',
   prop_plist: 'image/prop.plist',
+  map_png: 'image/map.png',
+  map_plist: 'image/map.plist',
 
   bg_music: 'music/bg.mp3',
   boom_music: 'music/boom.mp3',
@@ -321,6 +338,111 @@ var res = {
 var g_resources = [];
 for (var i in res) {
   g_resources.push(res[i]);
+}
+
+var Grid = cc.Class.extend({
+
+  ctor: function (width, height) {
+
+    this.width = width;
+    this.height = height;
+    this.cells = this.empty();
+  }
+
+});
+
+Grid.prototype.empty = function () {
+  var cells = [];
+  for (var x = 0; x < this.width; x++) {
+    var row = cells[x] = [];
+    for (var y = 0; y < this.height; y++) {
+      row.push(null);
+    }
+  }
+  return cells;
+};
+
+Grid.prototype.insertTile = function(tile){
+  this.cells[tile.x][tile.y] = tile;
+};
+
+Grid.prototype.removeTile = function(tile){
+  this.cells[tile.x][tile.y] = null;
+};
+
+Grid.prototype.cellOccupied = function (cell) {
+  return !!this.cellContent(cell);
+};
+
+Grid.prototype.cellContent = function (cell) {
+  if (this.withinBounds(cell)) {
+    return this.cells[cell.x][cell.y];
+  } else {
+    return null;
+  }
+};
+
+Grid.prototype.withinBounds = function (position) {
+  return position.x >= 0 && position.x < this.width &&
+    position.y >= 0 && position.y < this.height;
+};
+
+Grid.prototype.eachCell = function (callback) {
+  for (var x = 0; x < this.width; x++) {
+    for (var y = 0; y < this.height; y++) {
+      callback(this.cells[x][y]);
+    }
+  }
+};
+
+
+var Tile = cc.Class.extend({
+
+  ctor: function (position, type) {
+
+    this.position = position;
+    this.x = position.x;
+    this.y = position.y;
+    this.type = type || '001';
+
+  }
+
+});
+
+function formatStr(num, length) {
+  num = num.toString();
+  var len = num.length;
+  var delta = length - len;
+  while (delta-- > 0) {
+    num = '0' + num;
+  }
+  return num;
+}
+
+function addClickListener(sprite, callback, context) {
+  cc.eventManager.addListener({
+    event: cc.EventListener.TOUCH_ONE_BY_ONE,
+    swallowTouches: true,
+    onTouchBegan: function (touch, event) {
+      var target = event.getCurrentTarget();
+      var locationInNode = target.convertToNodeSpace(touch.getLocation());
+      var s = target.getContentSize();
+      var rect = cc.rect(0, 0, s.width, s.height);
+
+      if (cc.rectContainsPoint(rect, locationInNode)) {
+        return true;
+      }
+      return false;
+    },
+    onTouchMoved: function (touch, event) {
+
+    },
+    onTouchEnded: function (touch, event) {
+      var target = event.getCurrentTarget();
+      callback && callback.call(context, target);
+      //me.selectTile(target);
+    }
+  }, sprite);
 }
 
 var GPBackgroundLayer = cc.LayerColor.extend({
@@ -361,7 +483,7 @@ var GPTouchLayer = cc.Layer.extend({
   },
   initBatchNode: function () {
 
-    var texTiles = cc.textureCache.addImage(res.tiles_png);
+    var texTiles = cc.textureCache.addImage(res.tile_png);
     this.texTilesBatch = new cc.SpriteBatchNode(texTiles);
     this.addChild(this.texTilesBatch);
 
@@ -372,10 +494,6 @@ var GPTouchLayer = cc.Layer.extend({
     var texBoom = cc.textureCache.addImage(res.boom_png);
     this.texBoomBatch = new cc.SpriteBatchNode(texBoom);
     this.addChild(this.texBoomBatch);
-
-    var texIcon = cc.textureCache.addImage(res.icon_png);
-    this.texIconBatch = new cc.SpriteBatchNode(texIcon);
-    this.addChild(this.texIconBatch);
 
     var texResult = cc.textureCache.addImage(res.result_png);
     this.texResultBatch = new cc.SpriteBatchNode(texResult);
@@ -404,6 +522,8 @@ var GPTouchLayer = cc.Layer.extend({
     this.compassCount = GC.compass.count;
 
     this.initMap();
+
+    this.addMapInfo();
 
     this.initTiles();
 
@@ -807,22 +927,22 @@ var GPTouchLayer = cc.Layer.extend({
     this.timelineSp = new TimelineSprite();
     this.timelineSp.x = GC.timeline.x;
     this.timelineSp.y = GC.timeline.y;
-    this.texIconBatch.addChild(this.timelineSp);
+    this.addChild(this.timelineSp);
   },
   addRest: function () {
     this.restSp = new RestSprite(this.rest);
     this.restSp.x = GC.rest.x;
     this.restSp.y = GC.rest.y;
-    this.texIconBatch.addChild(this.restSp);
+    this.addChild(this.restSp);
   },
   addProps: function () {
-    var resetSp = new PropSprite('reset', this.resetCount);
-    resetSp.x = GC.reset.x;
-    resetSp.y = GC.reset.y;
+    this.resetSp = new PropSprite('reset', this.resetCount);
+    this.resetSp.x = GC.reset.x;
+    this.resetSp.y = GC.reset.y;
 
-    this.texPropBatch.addChild(resetSp);
+    this.texPropBatch.addChild(this.resetSp);
 
-    addClickListener(resetSp, function (target) {
+    addClickListener(this.resetSp, function (target) {
       if (this.resetCount > 0) {
         target.update(--this.resetCount);
         this.rebuildTiles();
@@ -830,13 +950,13 @@ var GPTouchLayer = cc.Layer.extend({
       }
     }, this);
 
-    var compassSp = new PropSprite('compass', this.compassCount);
-    compassSp.x = GC.compass.x;
-    compassSp.y = GC.compass.y;
+    this.compassSp = new PropSprite('compass', this.compassCount);
+    this.compassSp.x = GC.compass.x;
+    this.compassSp.y = GC.compass.y;
 
-    this.texPropBatch.addChild(compassSp);
+    this.texPropBatch.addChild(this.compassSp);
 
-    addClickListener(compassSp, function (target) {
+    addClickListener(this.compassSp, function (target) {
       if (this.compassCount > 0) {
         target.update(--this.compassCount);
         this.autoDelete();
@@ -844,6 +964,12 @@ var GPTouchLayer = cc.Layer.extend({
       }
     }, this);
 
+  },
+  addMapInfo: function () {
+    this.mapInfoSp = new MapInfoSprite(this.map);
+    this.mapInfoSp.x = GC.mapInfo.x;
+    this.mapInfoSp.y = GC.mapInfo.y;
+    this.addChild(this.mapInfoSp);
   },
   checkIsWin: function () {
     if (this.texTilesBatch.children.length === 0) {
@@ -936,11 +1062,15 @@ var GPTouchLayer = cc.Layer.extend({
     resultSp.play();
     this.texResultBatch.addChild(resultSp);
 
-    cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
+    //cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE);
 
-    //this.texTilesBatch.children.forEach(function (child) {
-    //  cc.eventManager.removeListeners(cc.EventListener.TOUCH_ONE_BY_ONE, child);
-    //});
+    this.texTilesBatch.children.forEach(function (child) {
+      cc.eventManager.removeListeners(child);
+    });
+
+    cc.eventManager.removeListeners(this.resetSp);
+    cc.eventManager.removeListeners(this.compassSp);
+
   },
   bindEvent: function () {
 
@@ -973,12 +1103,13 @@ var GamePlayLayer = cc.Layer.extend({
 
   addCache : function(){
 
-    cc.spriteFrameCache.addSpriteFrames(res.tiles_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.tile_plist);
     cc.spriteFrameCache.addSpriteFrames(res.pipe_plist);
     cc.spriteFrameCache.addSpriteFrames(res.boom_plist);
     cc.spriteFrameCache.addSpriteFrames(res.icon_plist);
     cc.spriteFrameCache.addSpriteFrames(res.result_plist);
     cc.spriteFrameCache.addSpriteFrames(res.prop_plist);
+    cc.spriteFrameCache.addSpriteFrames(res.map_plist);
 
   },
 
@@ -999,7 +1130,7 @@ var BoomSprite = cc.Sprite.extend({
 
   ctor: function () {
 
-    var frame = cc.spriteFrameCache.getSpriteFrame('00.png');
+    var frame = '#boom00.png';
     this._super(frame);
   },
   play: function () {
@@ -1041,6 +1172,48 @@ var continueHitSprite = cc.LabelTTF.extend({
   },
   destroy: function () {
     g_GPTouchLayer.removeChild(this);
+  }
+});
+
+var MapInfoSprite = cc.Sprite.extend({
+
+  ctor: function (map) {
+    this._super();
+
+    this.map = map;
+
+    var texMap = cc.textureCache.addImage(res.map_png);
+    this.texMapBatch = new cc.SpriteBatchNode(texMap);
+    this.addChild(this.texMapBatch);
+
+    this.init();
+  },
+  init: function () {
+
+    var frame = '#' + this.map.picName + '.png';
+    this.mapBg = new cc.Sprite(frame);
+    this.texMapBatch.addChild(this.mapBg);
+
+    this.lbName = new cc.LabelTTF('地图名称：' + this.map.name, 'monospace', 14);
+    this.lbName.anchorX = 0;
+    this.lbName.x = -70;
+    this.lbName.y = -70;
+    this.lbName.color = cc.color(248, 224, 112);
+    this.addChild(this.lbName);
+
+    this.lbLevel = new cc.LabelTTF('地图难度：' + this.map.level, 'monospace', 14);
+    this.lbLevel.anchorX = 0;
+    this.lbLevel.x = -70;
+    this.lbLevel.y = -100;
+    this.lbLevel.color = cc.color(248, 224, 112);
+    this.addChild(this.lbLevel);
+    //
+    //
+    //this.timeSp = new cc.Sprite('#lineTime.bmp');
+    //this.timeSp.x = 65;
+    //this.timeSp.setScaleX(0);
+    //this.maxScale = GC.timeline.width / this.timeSp.width;
+    //this.addChild(this.timeSp);
   }
 });
 
@@ -1144,6 +1317,10 @@ var TimelineSprite = cc.Sprite.extend({
   ctor: function () {
     this._super();
 
+    var texIcon = cc.textureCache.addImage(res.icon_png);
+    this.texIconBatch = new cc.SpriteBatchNode(texIcon);
+    this.addChild(this.texIconBatch);
+
     this.init();
   },
   init: function () {
@@ -1155,13 +1332,13 @@ var TimelineSprite = cc.Sprite.extend({
 
     this.timeBg = new cc.Sprite('#line.bmp');
     this.timeBg.x = 240;
-    this.addChild(this.timeBg);
+    this.texIconBatch.addChild(this.timeBg);
 
     this.timeSp = new cc.Sprite('#lineTime.bmp');
     this.timeSp.x = 65;
     this.timeSp.setScaleX(0);
     this.maxScale = GC.timeline.width / this.timeSp.width;
-    this.addChild(this.timeSp);
+    this.texIconBatch.addChild(this.timeSp);
   },
   update: function (time) {
     var scale = Math.min(1, time / GC.eachTime) * this.maxScale;
@@ -1169,108 +1346,3 @@ var TimelineSprite = cc.Sprite.extend({
     this.timeSp.x = 65 + this.timeSp.width * scale / 2;
   }
 });
-
-var Grid = cc.Class.extend({
-
-  ctor: function (width, height) {
-
-    this.width = width;
-    this.height = height;
-    this.cells = this.empty();
-  }
-
-});
-
-Grid.prototype.empty = function () {
-  var cells = [];
-  for (var x = 0; x < this.width; x++) {
-    var row = cells[x] = [];
-    for (var y = 0; y < this.height; y++) {
-      row.push(null);
-    }
-  }
-  return cells;
-};
-
-Grid.prototype.insertTile = function(tile){
-  this.cells[tile.x][tile.y] = tile;
-};
-
-Grid.prototype.removeTile = function(tile){
-  this.cells[tile.x][tile.y] = null;
-};
-
-Grid.prototype.cellOccupied = function (cell) {
-  return !!this.cellContent(cell);
-};
-
-Grid.prototype.cellContent = function (cell) {
-  if (this.withinBounds(cell)) {
-    return this.cells[cell.x][cell.y];
-  } else {
-    return null;
-  }
-};
-
-Grid.prototype.withinBounds = function (position) {
-  return position.x >= 0 && position.x < this.width &&
-    position.y >= 0 && position.y < this.height;
-};
-
-Grid.prototype.eachCell = function (callback) {
-  for (var x = 0; x < this.width; x++) {
-    for (var y = 0; y < this.height; y++) {
-      callback(this.cells[x][y]);
-    }
-  }
-};
-
-
-var Tile = cc.Class.extend({
-
-  ctor: function (position, type) {
-
-    this.position = position;
-    this.x = position.x;
-    this.y = position.y;
-    this.type = type || '001';
-
-  }
-
-});
-
-function formatStr(num, length) {
-  num = num.toString();
-  var len = num.length;
-  var delta = length - len;
-  while (delta-- > 0) {
-    num = '0' + num;
-  }
-  return num;
-}
-
-function addClickListener(sprite, callback, context) {
-  cc.eventManager.addListener({
-    event: cc.EventListener.TOUCH_ONE_BY_ONE,
-    swallowTouches: true,
-    onTouchBegan: function (touch, event) {
-      var target = event.getCurrentTarget();
-      var locationInNode = target.convertToNodeSpace(touch.getLocation());
-      var s = target.getContentSize();
-      var rect = cc.rect(0, 0, s.width, s.height);
-
-      if (cc.rectContainsPoint(rect, locationInNode)) {
-        return true;
-      }
-      return false;
-    },
-    onTouchMoved: function (touch, event) {
-
-    },
-    onTouchEnded: function (touch, event) {
-      var target = event.getCurrentTarget();
-      callback && callback.call(context, target);
-      //me.selectTile(target);
-    }
-  }, sprite);
-}

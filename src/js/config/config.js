@@ -34,6 +34,11 @@ GC.compass = {
   y: 400
 };
 
+GC.mapInfo = {
+  x: 702,
+  y: 300
+};
+
 GC.timeline = {
   x: 20,
   y: 22,

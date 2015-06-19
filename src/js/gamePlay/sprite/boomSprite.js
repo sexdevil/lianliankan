@@ -2,7 +2,7 @@ var BoomSprite = cc.Sprite.extend({
 
   ctor: function () {
 
-    var frame = cc.spriteFrameCache.getSpriteFrame('00.png');
+    var frame = '#boom00.png';
     this._super(frame);
   },
   play: function () {

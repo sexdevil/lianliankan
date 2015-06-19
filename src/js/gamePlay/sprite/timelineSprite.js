@@ -3,6 +3,10 @@ var TimelineSprite = cc.Sprite.extend({
   ctor: function () {
     this._super();
 
+    var texIcon = cc.textureCache.addImage(res.icon_png);
+    this.texIconBatch = new cc.SpriteBatchNode(texIcon);
+    this.addChild(this.texIconBatch);
+
     this.init();
   },
   init: function () {
@@ -14,13 +18,13 @@ var TimelineSprite = cc.Sprite.extend({
 
     this.timeBg = new cc.Sprite('#line.bmp');
     this.timeBg.x = 240;
-    this.addChild(this.timeBg);
+    this.texIconBatch.addChild(this.timeBg);
 
     this.timeSp = new cc.Sprite('#lineTime.bmp');
     this.timeSp.x = 65;
     this.timeSp.setScaleX(0);
     this.maxScale = GC.timeline.width / this.timeSp.width;
-    this.addChild(this.timeSp);
+    this.texIconBatch.addChild(this.timeSp);
   },
   update: function (time) {
     var scale = Math.min(1, time / GC.eachTime) * this.maxScale;

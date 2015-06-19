@@ -660,13 +660,13 @@
             <key>format</key>
             <integer>2</integer>
             <key>realTextureFileName</key>
-            <string>tiles.png</string>
+            <string>tile.png</string>
             <key>size</key>
             <string>{256,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:328b68a2179cfcfeebbf7422fbc19eb6:1/1$</string>
+            <string>$TexturePacker:SmartUpdate:b1a1b34667ee731c4e3de79dd36afe3d:1/1$</string>
             <key>textureFileName</key>
-            <string>tiles.png</string>
+            <string>tile.png</string>
         </dict>
     </dict>
 </plist>
