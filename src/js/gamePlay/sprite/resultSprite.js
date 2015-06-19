@@ -12,6 +12,5 @@ var ResultSprite = cc.Sprite.extend({
     var actionFadeIn = cc.fadeIn(duration);
     this.runAction(actionMove);
     this.runAction(actionFadeIn);
-
   }
 });

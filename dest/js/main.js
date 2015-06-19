@@ -56,6 +56,16 @@ GC.mapInfo = {
   y: 300
 };
 
+GC.score = {
+  x: 666,
+  y: 125
+};
+
+GC.start = {
+  x: 702,
+  y: 50
+};
+
 GC.timeline = {
   x: 20,
   y: 22,
@@ -82,6 +92,8 @@ GC.continueHit = {
 };
 
 GC.type_count = 50;
+
+GC.tileValue = 5;
 
 GC.eachTime = 30;
 
@@ -419,6 +431,7 @@ function formatStr(num, length) {
   return num;
 }
 
+
 function addClickListener(sprite, callback, context) {
   cc.eventManager.addListener({
     event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -477,9 +490,10 @@ var GPTouchLayer = cc.Layer.extend({
 
     this.initBatchNode();
 
+    this.addStartBtn();
+
     this.initGame();
 
-    this.bindEvent();
   },
   initBatchNode: function () {
 
@@ -490,6 +504,10 @@ var GPTouchLayer = cc.Layer.extend({
     var texPipe = cc.textureCache.addImage(res.pipe_png);
     this.texPipeBatch = new cc.SpriteBatchNode(texPipe);
     this.addChild(this.texPipeBatch);
+
+    var texIcon = cc.textureCache.addImage(res.icon_png);
+    this.texIconBatch = new cc.SpriteBatchNode(texIcon);
+    this.addChild(this.texIconBatch);
 
     var texBoom = cc.textureCache.addImage(res.boom_png);
     this.texBoomBatch = new cc.SpriteBatchNode(texBoom);
@@ -504,6 +522,18 @@ var GPTouchLayer = cc.Layer.extend({
     this.addChild(this.texPropBatch);
 
   },
+  addStartBtn: function () {
+    var startSp = new cc.Sprite('#start.png');
+    startSp.x = GC.start.x;
+    startSp.y = GC.start.y;
+    startSp.setScale(1.5);
+    this.texIconBatch.addChild(startSp);
+
+    addClickListener(startSp, function () {
+      this.dispose();
+      this.initGame();
+    }, this);
+  },
   initGame: function () {
     this.grid = new Grid(GC.grid.width, GC.grid.height);
 
@@ -512,6 +542,8 @@ var GPTouchLayer = cc.Layer.extend({
     cc.audioEngine.playEffect(res.start_music);
 
     this.spendTime = 0;
+
+    this.score = 0;
 
     this.continueHit = -1;
 
@@ -524,6 +556,8 @@ var GPTouchLayer = cc.Layer.extend({
     this.initMap();
 
     this.addMapInfo();
+
+    this.addScore();
 
     this.initTiles();
 
@@ -624,7 +658,6 @@ var GPTouchLayer = cc.Layer.extend({
     tileSp.y = GC.grid.y - tile.y * tileSp.height - tileSp.height / 2;
     this.texTilesBatch.addChild(tileSp);
 
-    var me = this;
     addClickListener(tileSp, function (target) {
       this.selectTile(target);
     }, this);
@@ -768,6 +801,23 @@ var GPTouchLayer = cc.Layer.extend({
 
     this.rest -= 2;
     this.restSp.update(this.rest);
+
+    var ratio = 1;
+    switch (true) {
+      case this.continueHit >= GC.continueHit.jianjiao:
+        ratio = 2.8;
+        break;
+      case this.continueHit >= GC.continueHit.koushao:
+        ratio = 2;
+        break;
+      case this.continueHit >= GC.continueHit.zhangsheng:
+        ratio = 1.4;
+        break;
+      default :
+        ratio = 1;
+    }
+    this.score += ratio * GC.tileValue;
+    this.scoreSp.update(this.score);
 
     cc.audioEngine.playEffect(res.boom_music);
 
@@ -971,6 +1021,12 @@ var GPTouchLayer = cc.Layer.extend({
     this.mapInfoSp.y = GC.mapInfo.y;
     this.addChild(this.mapInfoSp);
   },
+  addScore: function () {
+    this.scoreSp = new ScoreSprite(this.score);
+    this.scoreSp.x = GC.score.x;
+    this.scoreSp.y = GC.score.y;
+    this.addChild(this.scoreSp);
+  },
   checkIsWin: function () {
     if (this.texTilesBatch.children.length === 0) {
       this.gameOver(true);
@@ -1070,9 +1126,20 @@ var GPTouchLayer = cc.Layer.extend({
 
     cc.eventManager.removeListeners(this.resetSp);
     cc.eventManager.removeListeners(this.compassSp);
-
   },
-  bindEvent: function () {
+  dispose: function () {
+    this.state = GC.GAME_STATE.OVER;
+
+    this.stopMusic();
+
+    this.texTilesBatch.removeAllChildren();
+    this.texPropBatch.removeAllChildren();
+    this.texResultBatch.removeAllChildren();
+
+    this.removeChild(this.timelineSp);
+    this.removeChild(this.mapInfoSp);
+    this.removeChild(this.scoreSp);
+    this.removeChild(this.restSp);
 
   }
 });
@@ -1269,13 +1336,14 @@ var RestSprite = cc.Sprite.extend({
   },
   init: function () {
 
-    this.lb= new cc.LabelTTF('剩余方块：', 'monospace', 12);
+    this.lb = new cc.LabelTTF('剩余方块：', 'monospace', 12);
     this.lb.x = 20;
     this.lb.color = cc.color(248, 224, 112);
     this.addChild(this.lb);
 
-    this.lbRest = new cc.LabelTTF(this.rest,'monospace', 12);
-    this.lbRest.x = 60;
+    this.lbRest = new cc.LabelTTF(this.rest + '', 'monospace', 12);
+    this.lbRest.x = 50;
+    this.lbRest.anchorX = 0;
     this.lbRest.color = cc.color(248, 224, 112);
     this.addChild(this.lbRest);
 
@@ -1299,7 +1367,33 @@ var ResultSprite = cc.Sprite.extend({
     var actionFadeIn = cc.fadeIn(duration);
     this.runAction(actionMove);
     this.runAction(actionFadeIn);
+  }
+});
 
+var ScoreSprite = cc.Sprite.extend({
+
+  ctor: function (score) {
+    this._super();
+
+    this.score = score;
+
+    this.init();
+  },
+  init: function () {
+
+    this.lb= new cc.LabelTTF('当前得分：', 'monospace', 14);
+    this.lb.color = cc.color(248, 224, 112);
+    this.addChild(this.lb);
+
+    this.lbScore = new cc.LabelTTF(this.score + '','monospace', 14);
+    this.lbScore.x = 35;
+    this.lbScore.anchorX = 0;
+    this.lbScore.color = cc.color(248, 224, 112);
+    this.addChild(this.lbScore);
+
+  },
+  update: function (score) {
+    this.lbScore.setString(score);
   }
 });
 
@@ -1330,11 +1424,11 @@ var TimelineSprite = cc.Sprite.extend({
     this.lbTime.color = cc.color(248, 224, 112);
     this.addChild(this.lbTime);
 
-    this.timeBg = new cc.Sprite('#line.bmp');
+    this.timeBg = new cc.Sprite('#line.png');
     this.timeBg.x = 240;
     this.texIconBatch.addChild(this.timeBg);
 
-    this.timeSp = new cc.Sprite('#lineTime.bmp');
+    this.timeSp = new cc.Sprite('#lineTime.png');
     this.timeSp.x = 65;
     this.timeSp.setScaleX(0);
     this.maxScale = GC.timeline.width / this.timeSp.width;

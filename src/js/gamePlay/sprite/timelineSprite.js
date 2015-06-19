@@ -16,11 +16,11 @@ var TimelineSprite = cc.Sprite.extend({
     this.lbTime.color = cc.color(248, 224, 112);
     this.addChild(this.lbTime);
 
-    this.timeBg = new cc.Sprite('#line.bmp');
+    this.timeBg = new cc.Sprite('#line.png');
     this.timeBg.x = 240;
     this.texIconBatch.addChild(this.timeBg);
 
-    this.timeSp = new cc.Sprite('#lineTime.bmp');
+    this.timeSp = new cc.Sprite('#lineTime.png');
     this.timeSp.x = 65;
     this.timeSp.setScaleX(0);
     this.maxScale = GC.timeline.width / this.timeSp.width;

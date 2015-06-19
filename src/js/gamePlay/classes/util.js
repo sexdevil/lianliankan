@@ -8,6 +8,7 @@ function formatStr(num, length) {
   return num;
 }
 
+
 function addClickListener(sprite, callback, context) {
   cc.eventManager.addListener({
     event: cc.EventListener.TOUCH_ONE_BY_ONE,

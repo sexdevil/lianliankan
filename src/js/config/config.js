@@ -39,6 +39,16 @@ GC.mapInfo = {
   y: 300
 };
 
+GC.score = {
+  x: 666,
+  y: 125
+};
+
+GC.start = {
+  x: 702,
+  y: 50
+};
+
 GC.timeline = {
   x: 20,
   y: 22,
@@ -65,5 +75,7 @@ GC.continueHit = {
 };
 
 GC.type_count = 50;
+
+GC.tileValue = 5;
 
 GC.eachTime = 30;
